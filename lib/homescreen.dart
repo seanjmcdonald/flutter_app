@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
 import 'home.dart';
+import 'displayusers.dart';
 import 'profilepage.dart';
 
 
@@ -55,7 +56,7 @@ class _HomeScreen extends State<HomeScreen> {
 
   final List<Widget> renderedPages =[
     Home(),
-    Profile(),
+    DisplayUsers(),
     Profile(),
   ];
 

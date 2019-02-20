@@ -89,74 +89,53 @@ class _Profile extends State<Profile> {
   //    getUserInfo();
  //   getUserInfo();
     return new Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text('user profile'),
       ),
-      body: Container(
-         //   Text("name "+userData.name),
-           // Text("email "+userData.email),
-           // Text("major "+userData.major),
-           // Text("year "+userData.year),
-           child: Container(
-             child: ListView(
-               children: <Widget>[
-                 Center(
-                   child: Text("uid: "+userData.uid,
-                     style: TextStyle(
-                       fontSize: 29.0,
-                     ),),
-                 ),
-                 Center(
-                   child: Text("email: "+userData.email,
-                     style: TextStyle(
-                       fontSize: 29.0,
-                     ),),
-                 ),
-                 Center(
-                   child: Text("major: "+userData.major,
-                     style: TextStyle(
-                       fontSize: 29.0,
-                     ),),
-                 ),
-                 Center(
-                   child: Text("year: "+userData.year,
-                   style: TextStyle(
-                     fontSize: 29.0,
-                   ),),
-                 ),
-               ],
-                 ),
-             ),
-              height: MediaQuery.of(context).size.height/2,
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(42),
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(400.0),
+                bottomLeft: Radius.circular(400.0),
+              )
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                Text('email: '+userData.email,
+                  style: TextStyle(color: Colors.white),
                 ),
-              ),
-            ),
-/*
-            StreamBuilder(
-              stream: Firestore.instance.collection('user').document(userData.uid).snapshots(),
-              builder: (context, snapshot){
-                if(!snapshot.hasData){
-                  return Text('empty');
-                }
-                return Column(
-                  children: <Widget>[
-                  //  Text(snapshot.data['name']),
-                   // Text('email '+snapshot.data['email']),
-                    //Text('major '+snapshot.data['major']),
-                    //Text('year '+snapshot.data['year']),
-                  ],
-                );
-              },
 
+                Text('year: '+userData.year,
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text('major: '+userData.major,
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text('name: '+userData.name,
+                  style: TextStyle(color: Colors.white),
+                ),
+            ],
+          ),
             ),
-  */
-      );
+          GestureDetector(child: Text('asdasdasd'),onTap: () {
+            print('asdds');
+            Center(child:
+           new  Text('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',style: TextStyle(color: Colors.white),),
+            );
+          }),
+
+
+        ],
+      ),
+    );
   }
 }

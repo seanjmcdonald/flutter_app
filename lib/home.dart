@@ -30,6 +30,9 @@ class _Home extends State<Home> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.verified_user),onPressed: null,),
+        ],
         backgroundColor: Colors.white,
         title: Text('homepage'),
       ),
