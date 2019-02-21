@@ -20,15 +20,76 @@ class CameraApp extends StatefulWidget{
 }
 
 class _CameraApp extends State<CameraApp> {
-
+  FirebaseUser user;
   File image;
-  Uri location;
+  String location;
+  StorageReference reference = FirebaseStorage.instance.ref().child('QI5G6Mf46AfLIbVzL73QlZ3ZUbo1');
 
-  savePhoto() async{
+  Future<String>savePhoto() async{
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if(user!=null) {
-      FirebaseStorage.instance.ref().child(user.uid).putFile(image);
+      StorageReference ref = FirebaseStorage.instance.ref().child('QI5G6Mf46AfLIbVzL73QlZ3ZUbo1');
+      StorageUploadTask upload = ref.putFile(image);
+      var downurl = await (await upload.onComplete).ref.getDownloadURL();
+      location = downurl as String;
+      return downurl as String;
+     // var temp =FirebaseStorage.instance.ref().child(user.uid).putFile(image);
+      //location = await (await temp.onComplete).ref.getDownloadURL();
     }
+  }
+
+  uploadImage() async {
+    if(user!=null) {
+      final StorageReference ref = FirebaseStorage.instance.ref().child(user.uid);
+      final StorageUploadTask task = ref.putFile(image);
+      String downurl = (await (await task.onComplete).ref.getDownloadURL()).toString();
+      setState(() {
+        location= downurl.toString();
+      });
+    }
+  }
+
+  @override
+  initState(){
+      getUid();
+    super.initState();
+  }
+
+  getUid() async {
+    FirebaseUser _user = await FirebaseAuth.instance.currentUser();
+    if (_user!=null){
+      setState(() {
+        user=_user;
+      });
+    }
+  }
+
+  getFromGallery() async{
+    File _image= await ImagePicker.pickImage(source: ImageSource.gallery);
+    if(_image!=null) {
+      print(_image.path);
+      setState(() {
+        image = _image;
+      });
+    }
+  }
+
+  getFromCamera() async{
+    File _image= await ImagePicker.pickImage(source: ImageSource.camera);
+    if(_image!=null) {
+      print(_image.path);
+      setState(() {
+        image = _image;
+      });
+    }
+  }
+
+  getPhoto() async{
+    String download= await reference.getDownloadURL();
+    setState(() {
+      location='';
+    });
+
   }
 
   picker() async{
@@ -39,7 +100,6 @@ class _CameraApp extends State<CameraApp> {
       print(_image.path);
       setState(() {
         image = _image;
-        savePhoto();
       });
     }
   }
@@ -48,12 +108,34 @@ class _CameraApp extends State<CameraApp> {
   Widget build(context){
     return Scaffold(
       appBar: AppBar(title: Text('camera')),
-      body: Container(
-        child: Center(
-          child: image==null?Text('no image so show'):Image.file(image)),
-        ),
+      body: ListView(
+        children: <Widget>[
+          SizedBox(
+            width: 200.0,
+            height: 370.0,
+            child: image==null?Container():Image.file(image),
+          ),
+          Column(
+            //mainAxisAlignment: MainAxisAlignment.,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SizedBox(height: 40.0,width: 110.0,child: RaisedButton(child: Text('from gallery'),onPressed: getFromGallery,color: Colors.red,),),
+                  SizedBox(height: 40.0,width:110.0,child:RaisedButton(child: Text('with camera'),onPressed: getFromCamera,color: Colors.blue,),),
+                ],
+              ),
+              SizedBox(child: image!=null?RaisedButton(child: Text('upload photo'),onPressed: () {
+                uploadImage();print('the future is '+location.toString());
+              }
+              ):Text(''),),
+              //image!=null?RaisedButton(onPressed: null):
+          ],
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: picker,
+        onPressed: null,
         child: Icon(Icons.camera_alt),
       ),
     );

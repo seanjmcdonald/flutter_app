@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'userobject.dart';
-
+import 'camera.dart';
 
 class Profile extends StatefulWidget{
 
@@ -122,6 +122,9 @@ class _Profile extends State<Profile> {
                 ),
                 Text('name: '+userData.name,
                   style: TextStyle(color: Colors.white),
+                ),
+                Container(
+                 //              child: Image(image: ),
                 ),
             ],
           ),
