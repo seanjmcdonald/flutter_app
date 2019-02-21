@@ -25,19 +25,6 @@ class _CameraApp extends State<CameraApp> {
   String location;
   StorageReference reference = FirebaseStorage.instance.ref().child('QI5G6Mf46AfLIbVzL73QlZ3ZUbo1');
 
-  Future<String>savePhoto() async{
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    if(user!=null) {
-      StorageReference ref = FirebaseStorage.instance.ref().child('QI5G6Mf46AfLIbVzL73QlZ3ZUbo1');
-      StorageUploadTask upload = ref.putFile(image);
-      var downurl = await (await upload.onComplete).ref.getDownloadURL();
-      location = downurl as String;
-      return downurl as String;
-     // var temp =FirebaseStorage.instance.ref().child(user.uid).putFile(image);
-      //location = await (await temp.onComplete).ref.getDownloadURL();
-    }
-  }
-
   uploadImage() async {
     if(user!=null) {
       final StorageReference ref = FirebaseStorage.instance.ref().child(user.uid);
@@ -112,7 +99,7 @@ class _CameraApp extends State<CameraApp> {
         children: <Widget>[
           SizedBox(
             width: 200.0,
-            height: 370.0,
+            height: 270.0,
             child: image==null?Container():Image.file(image),
           ),
           Column(
@@ -126,18 +113,19 @@ class _CameraApp extends State<CameraApp> {
                 ],
               ),
               SizedBox(child: image!=null?RaisedButton(child: Text('upload photo'),onPressed: () {
-                uploadImage();print('the future is '+location.toString());
+                uploadImage();location==null?print('waiting'):Container(child:Text('the future is '+location.toString()));
               }
               ):Text(''),),
+              location==null?Text(''):Text(location),
               //image!=null?RaisedButton(onPressed: null):
           ],
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        child: Icon(Icons.camera_alt),
-      ),
+  //    floatingActionButton: FloatingActionButton(
+    //    onPressed: null,
+      //  child: Icon(Icons.camera_alt),
+      //),
     );
   }
 }
