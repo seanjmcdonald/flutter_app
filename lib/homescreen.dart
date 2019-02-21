@@ -4,7 +4,7 @@ import 'login.dart';
 import 'home.dart';
 import 'displayusers.dart';
 import 'profilepage.dart';
-
+import 'camera.dart';
 
 
 class Object{
@@ -55,7 +55,7 @@ class _HomeScreen extends State<HomeScreen> {
 //  Object oops=new Object();
 
   final List<Widget> renderedPages =[
-    Home(),
+    CameraApp(),
     DisplayUsers(),
     Profile(),
   ];
