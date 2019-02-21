@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:async/async.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 
 /*
 
 https://www.youtube.com/watch?v=kNe4Fw3zkKY
-
+https://stackoverflow.com/questions/51857796/flutter-upload-image-to-firebase-storage
  */
 
 
@@ -20,6 +22,15 @@ class CameraApp extends StatefulWidget{
 class _CameraApp extends State<CameraApp> {
 
   File image;
+  Uri location;
+
+  savePhoto() async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if(user!=null) {
+      FirebaseStorage.instance.ref().child(user.uid).putFile(image);
+    }
+  }
+
   picker() async{
     print('clicker was called');
   //  ImagePicker.pickImage(source: ImageSource.camera);
@@ -28,6 +39,7 @@ class _CameraApp extends State<CameraApp> {
       print(_image.path);
       setState(() {
         image = _image;
+        savePhoto();
       });
     }
   }
