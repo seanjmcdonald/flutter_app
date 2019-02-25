@@ -24,6 +24,7 @@ class SeniorProject extends StatelessWidget{
         '/':(context)=> new HomeScreen(),
         '/login':(context)=> new LoginPage(),
         '/Profile':(context)=> new Profile(),
+        '/EditProfile':(context)=> new EditProfile(),
     },
     );
   }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'userobject.dart';
+import 'main.dart';
 import 'camera.dart';
 
 class Profile extends StatefulWidget{
@@ -73,7 +74,10 @@ class _Profile extends State<Profile> {
       appBar: AppBar(
         actions: <Widget>[
           IconButton(icon: Icon(Icons.account_circle),
-            onPressed: () => EditProfile(),
+            onPressed: () {
+            print('pressed edit');
+              Navigator.pushNamed(context, '/EditProfile');
+            },
           ),
 
         ],
@@ -136,7 +140,26 @@ class EditProfile extends StatefulWidget {
 class _EditProfile extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    print('asdads');
+    return Scaffold(
+      appBar: AppBar(title: Text('Edit Profile'),
+      backgroundColor: Colors.blue,),
+      body: Column(
+        children: <Widget>[
+          Center(
+            child:
+          SizedBox(
+            width: MediaQuery.of(context).size.width-50,
+            height: 30.0,
+            child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                ),
+            ),
+          ),
+          ),
+        ],
+      ),
+    );
   }
 }
