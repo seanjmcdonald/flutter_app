@@ -71,6 +71,12 @@ class _Profile extends State<Profile> {
     return new Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.account_circle),
+            onPressed: () => EditProfile(),
+          ),
+
+        ],
         title: Text('user profile'),
       ),
       body: Stack(
@@ -112,12 +118,25 @@ class _Profile extends State<Profile> {
                       //child: Image.network('https://firebasestorage.googleapis.com/v0/b/something-fcc9c.appspot.com/o/QI5G6Mf46AfLIbVzL73QlZ3ZUbo1?alt=media&token=7b946a10-b4f0-420c-9bb1-82c2d446e3bb'),
                     ),
                 ),*/
-              Image.network(userData.imgurl,height: 150.0, width: 100.0,),
+              Image.network(userData.imgurl,height: 250.0, width: 100.0,),
             ],
           ),
             ),
         ],
       ),
     );
+  }
+}
+
+class EditProfile extends StatefulWidget {
+  @override
+  _EditProfile createState() => _EditProfile();
+}
+
+class _EditProfile extends State<EditProfile> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
   }
 }
