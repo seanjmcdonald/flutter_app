@@ -5,6 +5,7 @@ class UserData{
   String major='default';
   String year='default';
   String uid='default';
+  String imgurl='default';
 
   toJson () {
     return {
@@ -13,6 +14,7 @@ class UserData{
       "major":major,
       "year":year,
       "uid":uid,
+      "imgurl":imgurl,
     };
   }
 
@@ -23,6 +25,7 @@ class UserData{
       major: parsedJson['major'],
       year: parsedJson['year'],
       uid: parsedJson['uid'],
+      //fix
     };
   }
 

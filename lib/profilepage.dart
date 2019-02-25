@@ -21,9 +21,7 @@ class _Profile extends State<Profile> {
     //fix to not get all data
     getUserInfo();
     super.initState();
-
   }
-
 
 
   Future<void> changeData() async{
@@ -40,54 +38,36 @@ class _Profile extends State<Profile> {
       if(postSnapshot!=null) {
         setState(() {
           ss = postSnapshot;
-
         });
       }
     });
-
-   // return Firestore.instance.collection('user').document(userData.uid).getData();
   }
 
 
   setLocal() {
-    StreamBuilder(
-      stream: Firestore.instance.collection('user').document(userData.uid).snapshots(),
-      builder: (context, snapshot){
-        if(!snapshot.hasData){
-          changeData();
-        }
-
-        userData.name=snapshot.data['name'];
-        userData.major=snapshot.data['major'];
-        userData.year=snapshot.data['year'];
-
-        // Text('email '+snapshot.data['email']),
-            //Text('major '+snapshot.data['major']),
-            //Text('year '+snapshot.data['year']),
-      },
-
-    );
+    userData.name=ss.data['name'];
+    userData.major=ss.data['major'];
+    userData.year=ss.data['year'];
+    userData.imgurl=ss.data['imgurl'];
   }
 
   getUserInfo() async {
     FirebaseUser _user = await FirebaseAuth.instance.currentUser();
-    setState(() {
-
-      userData.uid=_user.uid;
-      userData.email=_user.email;
-      userData.major='compsci';
-      getFromFirebase();
-      setLocal();
-      //userData.email=_user.
-      changeData();
-
-    });
+    if(_user!=null) {
+      setState(() {
+        userData.uid = _user.uid;
+        userData.email = _user.email;
+        getFromFirebase();
+        //setLocal();
+        // changeData();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-  //    getUserInfo();
- //   getUserInfo();
+    //fix??
+    setLocal();
     return new Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -123,20 +103,19 @@ class _Profile extends State<Profile> {
                 Text('name: '+userData.name,
                   style: TextStyle(color: Colors.white),
                 ),
-                Container(
-                 //              child: Image(image: ),
-                ),
+              /*  SizedBox(
+                  width: 100.0,
+                  height: 100.0,
+                  child:
+                    Container(
+                      child: Image.network(userData.imgurl),
+                      //child: Image.network('https://firebasestorage.googleapis.com/v0/b/something-fcc9c.appspot.com/o/QI5G6Mf46AfLIbVzL73QlZ3ZUbo1?alt=media&token=7b946a10-b4f0-420c-9bb1-82c2d446e3bb'),
+                    ),
+                ),*/
+              Image.network(userData.imgurl,height: 150.0, width: 100.0,),
             ],
           ),
             ),
-          GestureDetector(child: Text('asdasdasd'),onTap: () {
-            print('asdds');
-            Center(child:
-           new  Text('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',style: TextStyle(color: Colors.white),),
-            );
-          }),
-
-
         ],
       ),
     );

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:async/async.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'userobject.dart';
 /*
 
 https://www.youtube.com/watch?v=kNe4Fw3zkKY
@@ -19,11 +19,24 @@ class CameraApp extends StatefulWidget{
   _CameraApp createState() => _CameraApp();
 }
 
+
+
 class _CameraApp extends State<CameraApp> {
+  UserData userData;
   FirebaseUser user;
   File image;
   String location;
-  StorageReference reference = FirebaseStorage.instance.ref().child('QI5G6Mf46AfLIbVzL73QlZ3ZUbo1');
+  //StorageReference reference = FirebaseStorage.instance.ref().child();
+
+
+  changeProfilePicture() {
+      //check logged in
+
+    Firestore.instance.collection('user').document(user.uid).updateData({"imgurl":location});
+    //  Firestore.instance.collection('user').document(userData.uid).setData(userData.toJson()).catchError((e) {
+      //print(e);
+  //  });
+  }
 
   uploadImage() async {
     if(user!=null) {
@@ -32,6 +45,7 @@ class _CameraApp extends State<CameraApp> {
       String downurl = (await (await task.onComplete).ref.getDownloadURL()).toString();
       setState(() {
         location= downurl.toString();
+        changeProfilePicture();
       });
     }
   }
@@ -39,6 +53,9 @@ class _CameraApp extends State<CameraApp> {
   @override
   initState(){
       getUid();
+      if(user!=null){
+
+      }
     super.initState();
   }
 
@@ -69,14 +86,6 @@ class _CameraApp extends State<CameraApp> {
         image = _image;
       });
     }
-  }
-
-  getPhoto() async{
-    String download= await reference.getDownloadURL();
-    setState(() {
-      location='';
-    });
-
   }
 
   picker() async{
