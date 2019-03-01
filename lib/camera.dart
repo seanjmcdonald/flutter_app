@@ -31,7 +31,6 @@ class _CameraApp extends State<CameraApp> {
 
   changeProfilePicture() {
       //check logged in
-
     Firestore.instance.collection('user').document(user.uid).updateData({"imgurl":location});
     //  Firestore.instance.collection('user').document(userData.uid).setData(userData.toJson()).catchError((e) {
       //print(e);

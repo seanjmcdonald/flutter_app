@@ -40,6 +40,8 @@ class _Profile extends State<Profile> {
         setState(() {
           ss = postSnapshot;
         });
+      } else {
+        changeData();
       }
     });
   }
@@ -68,7 +70,7 @@ class _Profile extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     //fix??
-    setLocal();
+    //setLocal();
     return new Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -147,16 +149,18 @@ class _EditProfile extends State<EditProfile> {
       body: Column(
         children: <Widget>[
           Center(
-            child:
-          SizedBox(
-            width: MediaQuery.of(context).size.width-50,
-            height: 30.0,
-            child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                ),
+            child: Container(
+              width: MediaQuery.of(context).size.width-25,
+              height: 100.0,
+              color: Colors.blue,
+              child: SimpleDialog(
+                title: Text('select a year'),
+                children: <Widget>[
+                  Text('sdds'),
+                  Text('sddddddd'),
+                ],
+              ),
             ),
-          ),
           ),
         ],
       ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'homescreen.dart';
+import 'createuser.dart';
+import 'main.dart';
 
 class loginData{
   String email='';
@@ -77,7 +79,15 @@ class _LoginPage extends State<LoginPage> {
                 new Container(
                   width: screenSize.width,
                   child: new RaisedButton(
-                      onPressed: signIn,
+                    child: Text('Sign In'),
+                    onPressed: signIn,
+                  ),
+                ),
+                new Container(
+                  width: screenSize.width,
+                  child: new RaisedButton(
+                    child: Text('Create an account'),
+                    onPressed: () => Navigator.pushNamed(context, '/createaccount'),
                   ),
                 ),
               ],

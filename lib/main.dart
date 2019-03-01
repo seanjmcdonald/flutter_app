@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'homescreen.dart';
 import 'login.dart';
 import 'profilepage.dart';
+import 'displayusers.dart';
+import 'createuser.dart';
 
 
 void main() {
@@ -25,7 +27,10 @@ class SeniorProject extends StatelessWidget{
         '/login':(context)=> new LoginPage(),
         '/Profile':(context)=> new Profile(),
         '/EditProfile':(context)=> new EditProfile(),
-    },
+        '/DisplayUsers':(context)=> new DisplayUsers(),
+        '/createaccount':(context)=> new CreateAccountPage(),
+
+      },
     );
   }
 }
