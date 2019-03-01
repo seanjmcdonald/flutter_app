@@ -7,7 +7,7 @@ import 'logout.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
-
+import 'dart:math' as math;
 /*
 https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
 http://tphangout.com/flutter-firestore-crud-reading-and-writing-data/
@@ -43,18 +43,20 @@ QuerySnapshot ss;
     }
     return ListView.builder(
       itemCount: ss.documents.length,
-        padding: EdgeInsets.all(5.0),
+        //padding: EdgeInsets.all(5.0),
         itemBuilder: (context,i){
           return ListTileTheme(
             child: Container(
               //width: MediaQuery.of(context).size.width,
-              color: Colors.blue,
+              color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0)
+              ,
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 50.0,
-                    height: 50.0,
-                    child: Image.network(ss.documents[i].data['imgurl'].toString()),),
+                    width: 100.0,
+                   // padding: EdgeInsets.all(5.0),
+                    height: 150.0,
+                    child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
                   Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['email'])],),),
             //  ListTile(
               //selected: false,

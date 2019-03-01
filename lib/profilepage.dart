@@ -36,11 +36,14 @@ class _Profile extends State<Profile> {
     final DocumentReference postRef = Firestore.instance.document("user/"+userData.uid);
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
-      if(postSnapshot!=null) {
+      if(postSnapshot.exists) {
+//        if(postSnapshot!=null) {
         setState(() {
           ss = postSnapshot;
         });
       } else {
+        print('no data');
+        print(userData.uid);
         changeData();
       }
     });
@@ -60,6 +63,7 @@ class _Profile extends State<Profile> {
       setState(() {
         userData.uid = _user.uid;
         userData.email = _user.email;
+        print(_user.uid);
         getFromFirebase();
         //setLocal();
         // changeData();
