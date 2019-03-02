@@ -160,12 +160,24 @@ class _EditProfile extends State<EditProfile> {
       child: Text('Junior'),
       value: 'junior',
     ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Senior'),
+      value: 'senior',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Post-bac'),
+      value: 'postbac',
+    ));
   }
 
+  @override
+  void initState() {
+    loadList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    loadList();
     return Scaffold(
       appBar: AppBar(title: Text('Edit Profile'),
       backgroundColor: Colors.blue,),
@@ -201,12 +213,13 @@ class _EditProfile extends State<EditProfile> {
             Container(
               child: Center(
               child: DropdownButton(
-                value: selectedYear,
+                //value: selectedYear,
                 hint: selectedYear==null?Text('Select your year'):Text(selectedYear),
-                  items: selectYear, onChanged: (value) {
-                    selectedYear=value;
+                  items: selectYear,
+                  onChanged: (value) {
+                  print('you selected $value');
                     setState(() {
-                      
+                      selectedYear=value;
                     });
               }
               ),
