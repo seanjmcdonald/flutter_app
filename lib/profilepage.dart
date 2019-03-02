@@ -13,13 +13,17 @@ class Profile extends StatefulWidget{
 }
 
 class _Profile extends State<Profile> {
- // FirebaseUser user;
+  //FirebaseUser user;
   UserData userData = new UserData();
   DocumentSnapshot ss;
+  bool changename;
+  final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
+  String newName;
 
   @override
   initState(){
     //fix to not get all data
+    changename=false;
     getUserInfo();
     super.initState();
   }
@@ -31,6 +35,8 @@ class _Profile extends State<Profile> {
       print(e);
     });
   }
+
+
 
   getFromFirebase() async {
     final DocumentReference postRef = Firestore.instance.document("user/"+userData.uid);
@@ -71,11 +77,32 @@ class _Profile extends State<Profile> {
     }
   }
 
+  changeName() {
+    Firestore.instance.collection('user').document(userData.uid).updateData({"name": 'NEW NAME BOYS'});
+  }
+
+  alterUserData(name,newName) {
+    Firestore.instance.collection('user').document(userData.uid).updateData({name:newName});
+  }
+
+  saveForm(){
+    final formState=_formKey.currentState;
+    //FIX validate
+    if(formState.validate()) {
+      formState.save();
+      print('saved form');
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     //fix??
     setLocal();
     return new Scaffold(
+      resizeToAvoidBottomPadding: false,
+
       backgroundColor: Colors.black,
       appBar: AppBar(
         actions: <Widget>[
@@ -106,15 +133,15 @@ class _Profile extends State<Profile> {
 
 
 
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: ListView(
+              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
 
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('name: '+userData.email,
+                  Text('email: '+userData.email,
                     style: TextStyle(color: Colors.white),
                   ),
                   FlatButton(
@@ -130,15 +157,44 @@ class _Profile extends State<Profile> {
                     style: TextStyle(color: Colors.white),
                   ),
                   FlatButton(
-                    onPressed: null,
-                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                    child: changename==false?Text('EDIT',style: TextStyle(color: Colors.white)):SizedBox(
+                      height: 100.0,
+                      width: MediaQuery.of(context).size.width/3,
+                      child: Form(
+                        key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            style: TextStyle(color: Colors.white),
+                            validator: (val)=>val==''?val:null,
+                            onSaved: (val)=> newName=val,
+                          ),
+                          RaisedButton(
+                            color: Colors.orange,
+                              child: Text('Submit',style: TextStyle(color: Colors.white),),
+                              onPressed: () {
+                                saveForm();
+                                alterUserData('name',newName);  
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                       changename=!changename;
+                      });
+                      print('going for it');
+                  changeName();
+                  },
                   ),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('year: '+userData.name,
+                  Text('year: '+userData.year,
                     style: TextStyle(color: Colors.white),
                   ),
                   FlatButton(
@@ -150,7 +206,7 @@ class _Profile extends State<Profile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('major: '+userData.name,
+                  Text('major: '+userData.major,
                     style: TextStyle(color: Colors.white),
                   ),
                   FlatButton(
@@ -227,7 +283,7 @@ class _EditProfile extends State<EditProfile> {
       appBar: AppBar(title: Text('Edit Profile'),
       backgroundColor: Colors.blue,),
       body: Form(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Container(
               alignment: Alignment.center,
