@@ -144,29 +144,76 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfile extends State<EditProfile> {
+  List<DropdownMenuItem<String>> selectYear = [];
+  String selectedYear;
+
+  loadList(){
+    selectYear.add(DropdownMenuItem(
+      child: Text('Freshman'),
+      value: 'freshman',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Sophmore'),
+      value: 'sophmore',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Junior'),
+      value: 'junior',
+    ));
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    print('asdads');
+    loadList();
     return Scaffold(
       appBar: AppBar(title: Text('Edit Profile'),
       backgroundColor: Colors.blue,),
-      body: Column(
-        children: <Widget>[
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width-25,
-              height: 100.0,
-              color: Colors.blue,
-              child: SimpleDialog(
-                title: Text('select a year'),
+      body: Form(
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              color: Colors.orange,
+              width: MediaQuery.of(context).size.width-20,
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('sdds'),
-                  Text('sddddddd'),
+                  Text('Name'),
+                  Text('Stuff'),
                 ],
               ),
             ),
-          ),
-        ],
+            Container(
+              alignment: Alignment.center,
+              color: Colors.green,
+              padding: EdgeInsets.all(10),
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('Year'),
+                  Text('Stuff'),
+                ],
+              ),
+            ),
+            Container(
+              child: Center(
+              child: DropdownButton(
+                value: selectedYear,
+                hint: selectedYear==null?Text('Select your year'):Text(selectedYear),
+                  items: selectYear, onChanged: (value) {
+                    selectedYear=value;
+                    setState(() {
+                      
+                    });
+              }
+              ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
