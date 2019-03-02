@@ -74,7 +74,7 @@ class _Profile extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     //fix??
-    //setLocal();
+    setLocal();
     return new Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -103,32 +103,77 @@ class _Profile extends State<Profile> {
             ),
           ),
           Center(
+
+
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-                Text('email: '+userData.email,
-                  style: TextStyle(color: Colors.white),
-                ),
 
-                Text('year: '+userData.year,
-                  style: TextStyle(color: Colors.white),
-                ),
-                Text('major: '+userData.major,
-                  style: TextStyle(color: Colors.white),
-                ),
-                Text('name: '+userData.name,
-                  style: TextStyle(color: Colors.white),
-                ),
-              /*  SizedBox(
-                  width: 100.0,
-                  height: 100.0,
-                  child:
-                    Container(
-                      child: Image.network(userData.imgurl),
-                      //child: Image.network('https://firebasestorage.googleapis.com/v0/b/something-fcc9c.appspot.com/o/QI5G6Mf46AfLIbVzL73QlZ3ZUbo1?alt=media&token=7b946a10-b4f0-420c-9bb1-82c2d446e3bb'),
-                    ),
-                ),*/
-              Image.network(userData.imgurl,height: 250.0, width: 100.0,),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('name: '+userData.email,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  FlatButton(
+                    onPressed: null,
+                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('name: '+userData.name,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  FlatButton(
+                    onPressed: null,
+                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('year: '+userData.name,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  FlatButton(
+                    onPressed: null,
+                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('major: '+userData.name,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  FlatButton(
+                    onPressed: null,
+                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Image.network(userData.imgurl,height: MediaQuery.of(context).size.height/4, width: MediaQuery.of(context).size.width/3*2),
+                  FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        Navigator.of(context).pushNamedAndRemoveUntil('/camera', (Route<dynamic> route)=> false);
+
+                      });
+            },
+                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
             ],
           ),
             ),
@@ -186,43 +231,47 @@ class _EditProfile extends State<EditProfile> {
           children: <Widget>[
             Container(
               alignment: Alignment.center,
-              color: Colors.orange,
               width: MediaQuery.of(context).size.width-20,
               padding: EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text('Name'),
-                  Text('Stuff'),
+                  SizedBox(
+                    height: 23.0,
+                    width: MediaQuery.of(context).size.width/3,
+                    child: TextFormField(
+                    ),
+                  )
                 ],
               ),
             ),
             Container(
-              alignment: Alignment.center,
-              color: Colors.green,
-              padding: EdgeInsets.all(10),
-              width: MediaQuery.of(context).size.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text('Year'),
-                  Text('Stuff'),
-                ],
-              ),
-            ),
-            Container(
-              child: Center(
-              child: DropdownButton(
+              DropdownButton(
                 //value: selectedYear,
                 hint: selectedYear==null?Text('Select your year'):Text(selectedYear),
                   items: selectYear,
                   onChanged: (value) {
-                  print('you selected $value');
                     setState(() {
                       selectedYear=value;
                     });
               }
               ),
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('Major'),
+                  Text('new name'),
+
+                ],
               ),
             ),
           ],

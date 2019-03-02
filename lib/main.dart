@@ -4,6 +4,7 @@ import 'login.dart';
 import 'profilepage.dart';
 import 'displayusers.dart';
 import 'createuser.dart';
+import 'camera.dart';
 
 
 void main() {
@@ -29,6 +30,7 @@ class SeniorProject extends StatelessWidget{
         '/EditProfile':(context)=> new EditProfile(),
         '/DisplayUsers':(context)=> new DisplayUsers(),
         '/createaccount':(context)=> new CreateAccountPage(),
+        '/camera':(context)=> new CameraApp(),
 
       },
     );

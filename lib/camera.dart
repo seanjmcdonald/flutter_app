@@ -124,7 +124,14 @@ class _CameraApp extends State<CameraApp> {
                 uploadImage();location==null?print('waiting'):Container(child:Text('the future is '+location.toString()));
               }
               ):Text(''),),
-              location==null?Text(''):Text(location),
+              SizedBox(height: 40.0,width: 110.0,
+                child: RaisedButton(child:
+                Text('back to profile'),
+                  onPressed:() => Navigator.of(context).pushNamedAndRemoveUntil('/Profile', (Route<dynamic> route)=> false),
+
+                   // Navigator.pushNamed(context,'/Profile'),
+                  color: Colors.red,
+              ),),
               //image!=null?RaisedButton(onPressed: null):
           ],
           ),
