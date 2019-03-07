@@ -19,8 +19,9 @@ class _Profile extends State<Profile> {
   DocumentSnapshot ss=null;
   bool changename=false;
   bool changefield=false;
+  bool changemajor=false;
   final GlobalKey<FormState>_formKey= new GlobalKey<FormState>();
-  String newName,newYear,selectedyear;
+  String newMajor,newName,newYear,selectedyear;
  //changefield=false;
   //changename=false;
 
@@ -59,7 +60,7 @@ class _Profile extends State<Profile> {
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
       if(postSnapshot!=null && postSnapshot.exists) {
-        print('NOT NULL');
+
         setState(() {
           ss = postSnapshot;
         });
@@ -252,8 +253,39 @@ class _Profile extends State<Profile> {
                     style: TextStyle(color: Colors.white),
                   ),
                   FlatButton(
-                    onPressed: null,
-                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                    child: changemajor==false?Text('EDIT',style: TextStyle(color: Colors.white)):SizedBox(
+                      height: 100.0,
+                      width: MediaQuery.of(context).size.width/3,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: <Widget>[
+                            TextFormField(
+                              style: TextStyle(color: Colors.white),
+                              validator: (val)=>val==''?val:null,
+                              onSaved: (val)=> newMajor=val,
+                            ),
+                            RaisedButton(
+                              color: Colors.orange,
+                              child: Text('Submit',style: TextStyle(color: Colors.white),),
+                              onPressed: () {
+                                saveForm();
+                                alterUserData('major',newMajor);
+                                setState(() {
+                                  userData.major=newMajor;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        changemajor=!changemajor;
+                      });
+                      print('going for it');
+                    },
                   ),
                 ],
               ),

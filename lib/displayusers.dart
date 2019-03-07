@@ -14,12 +14,18 @@ http://tphangout.com/flutter-firestore-crud-reading-and-writing-data/
  */
 
 
-class FilterUsers extends StatefulWidget {
+class CreateQuery extends StatefulWidget {
   @override
-  _FilterUsers createState() => _FilterUsers();
+  _CreateQuery createState() => _CreateQuery();
 }
 
-class _FilterUsers extends State<FilterUsers> {
+class _CreateQuery extends State<CreateQuery> {
+  List<DropdownMenuItem<String>> selectYear = [];
+  List<DropdownMenuItem<String>> selectMajor = [];
+  String selectedYear='none';
+  bool showSearch=false;
+
+  UserData userData = new UserData();
   FirebaseUser user;
   QuerySnapshot ss;
 
@@ -33,46 +39,180 @@ class _FilterUsers extends State<FilterUsers> {
   }
 
   getData() async{
-    return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').snapshots();
+    return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
+  }
 
+  loadYear(){
+    selectYear.add(DropdownMenuItem(
+      child: Text('Freshman'),
+      value: 'Freshman',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Sophmore'),
+      value: 'Sophmore',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Junior'),
+      value: 'Junior',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Senior'),
+      value: 'Senior',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Post-bac'),
+      value: 'Post-bac',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('clear'),
+      value: 'none',
+    ));
+  }
+
+  @override
+  void initState() {
+    loadYear();
+    getData().then((snapshot){
+      setState(() {
+        ss=snapshot;
+      });
+    });
+    super.initState();
   }
 
   Widget search(query){
-    return StreamBuilder(
-      stream: Firestore.instance.collection('user').where('major', isEqualTo: query).snapshots(),
-      builder: (context,snapshot){
-        if(!snapshot.hasData){
-          return Text('loading');
-        }
-          return ListView.builder(
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: (context,i){
-                return ListTileTheme(
-                  child:  Center(
-                    child: Text(i.toString()),
-                  //  child: Text(ss.documents[i].data['major'].toString()),
-                  ),
-                );
-                print(ss.documents[i].data['major']);
-              },
-          );
+    if(ss==null){
+      return Center(child: Column(children: <Widget>[Text('loading...')],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),);
+    }
+    return ListView.builder(
+      itemCount: ss.documents.length,
+      itemBuilder: (context,i){
+        return ListTileTheme(
+          child: Container(
+            color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 100.0,
+                  height: 150.0,
+                  child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
+                Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['major']),Text(ss.documents[i].data['year'])],),),
+              ],
+            ),
+
+          ),
+        );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    getUser();
+    return Scaffold(
+      appBar: AppBar(title: Text('search for users'),),
+      body: ListView(
+         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                  DropdownButton(
+                  items: selectYear,
+                  hint: selectedYear=='none'?Text('search for a year'):Text(selectedYear),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedYear=value;
+                    });
+                  },
+                ),
+                RaisedButton(
+                    onPressed: () {
+                      print(showSearch);
+                      setState(() {
+                        showSearch=!showSearch;
+                      });
+                    }
+                ),
+
+      ],
+            ),
+            Container(
+
+              child:search('murderer'),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height/1.5,
+            )
+          ],
+        ),
+    );
+  }
+}
+
+
+
+class FilterUsers extends StatefulWidget {
+  @override
+  _FilterUsers createState() => _FilterUsers();
+}
+
+class _FilterUsers extends State<FilterUsers> {
+  UserData userData = new UserData();
+  FirebaseUser user;
+  QuerySnapshot ss;
+
+  getUser() async{
+    FirebaseUser _user= await FirebaseAuth.instance.currentUser();
+    if(_user!=null){
+      setState(() {
+        user=_user;
+      });
+    }
+  }
+
+  initState() {
     getData().then((snapshot){
-      print(snapshot.data.documents.length);
       setState(() {
         ss=snapshot;
-        print(snapshot.toString());
       });
     });
+    super.initState();
+  }
+
+  getData() async{
+    return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
+  }
+
+  Widget search(query){
+    if(ss==null){
+      return Center(child: Column(children: <Widget>[Text('loading...')],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),);
+    }
+          return ListView.builder(
+              itemCount: ss.documents.length,
+              itemBuilder: (context,i){
+                return ListTileTheme(
+                  child: Container(
+                    color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: 100.0,
+                          height: 150.0,
+                          child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
+                        Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['major']),Text(ss.documents[i].data['year'])],),),
+                      ],
+                    ),
+
+                  ),
+                );
+              },
+          );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(title: Text('query'),),
-      body: search('murderer'),
+      body: ss!=null?search('murderer'):Text('loading'),
     );
   }
 }
@@ -93,6 +233,7 @@ QuerySnapshot ss;
   initState() {
     getData().then((snapshot){
       setState(() {
+        print('loading ss');
         ss=snapshot;
       });
     });

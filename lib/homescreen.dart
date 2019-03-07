@@ -58,7 +58,8 @@ class _HomeScreen extends State<HomeScreen> {
     CameraApp(),
     DisplayUsers(),
     Profile(),
-    FilterUsers(),
+   // FilterUsers(),
+    CreateQuery(),
   ];
 
 /*
