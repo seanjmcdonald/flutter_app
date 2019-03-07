@@ -58,6 +58,7 @@ class _HomeScreen extends State<HomeScreen> {
     CameraApp(),
     DisplayUsers(),
     Profile(),
+    FilterUsers(),
   ];
 
 /*
@@ -116,6 +117,10 @@ class _HomeScreen extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             title: Text('place holder'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            title: Text('filter'),
           ),
         ],
         ),

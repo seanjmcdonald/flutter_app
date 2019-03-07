@@ -13,54 +13,75 @@ class Profile extends StatefulWidget{
 }
 
 class _Profile extends State<Profile> {
-  //FirebaseUser user;
+  List<DropdownMenuItem<String>> selectYear = [];
+
   UserData userData = new UserData();
-  DocumentSnapshot ss;
-  bool changename;
-  final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
-  String newName;
+  DocumentSnapshot ss=null;
+  bool changename=false;
+  bool changefield=false;
+  final GlobalKey<FormState>_formKey= new GlobalKey<FormState>();
+  String newName,newYear,selectedyear;
+ //changefield=false;
+  //changename=false;
 
-  @override
-  initState(){
-    //fix to not get all data
-    changename=false;
-    getUserInfo();
-    super.initState();
+  loadList(){
+    selectYear.add(DropdownMenuItem(
+      child: Text('Freshman'),
+      value: 'freshman',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Sophmore'),
+      value: 'sophmore',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Junior'),
+      value: 'junior',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Senior'),
+      value: 'senior',
+    ));
+    selectYear.add(DropdownMenuItem(
+      child: Text('Post-bac'),
+      value: 'postbac',
+    ));
   }
-
 
   Future<void> changeData() async{
     //check logged in
     Firestore.instance.collection('user').document(userData.uid).setData(userData.toJson()).catchError((e) {
-      print(e);
+      print(e+ " in changedata");
     });
   }
-
-
 
   getFromFirebase() async {
     final DocumentReference postRef = Firestore.instance.document("user/"+userData.uid);
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
-      if(postSnapshot.exists) {
-//        if(postSnapshot!=null) {
+      if(postSnapshot!=null && postSnapshot.exists) {
+        print('NOT NULL');
         setState(() {
           ss = postSnapshot;
         });
       } else {
-        print('no data');
-        print(userData.uid);
+        print('errors');
         changeData();
       }
+    }).catchError((e){
+      print(userData.uid+' uid');
+      print(e.toString()+" was caught while calling getFromFirebase");
     });
   }
 
 
   setLocal() {
+    setState(() {
     userData.name=ss.data['name'];
     userData.major=ss.data['major'];
     userData.year=ss.data['year'];
     userData.imgurl=ss.data['imgurl'];
+    });
+
   }
 
   getUserInfo() async {
@@ -69,17 +90,12 @@ class _Profile extends State<Profile> {
       setState(() {
         userData.uid = _user.uid;
         userData.email = _user.email;
-        print(_user.uid);
-        getFromFirebase();
+      });
         //setLocal();
         // changeData();
-      });
     }
   }
 
-  changeName() {
-    Firestore.instance.collection('user').document(userData.uid).updateData({"name": 'NEW NAME BOYS'});
-  }
 
   alterUserData(name,newName) {
     Firestore.instance.collection('user').document(userData.uid).updateData({name:newName});
@@ -99,8 +115,15 @@ class _Profile extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     //fix??
-    setLocal();
-    return new Scaffold(
+    getUserInfo();
+    if(userData.uid!='default'){
+      getFromFirebase();
+    }
+
+    if(ss!=null) {
+      setLocal();
+    }
+    return Scaffold(
       resizeToAvoidBottomPadding: false,
 
       backgroundColor: Colors.black,
@@ -116,7 +139,7 @@ class _Profile extends State<Profile> {
         ],
         title: Text('user profile'),
       ),
-      body: Stack(
+      body:(ss==null)?Center(child: Column(children: <Widget>[Text('loading...',style: TextStyle(color: Colors.white),)],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),):Stack(
         children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height,
@@ -130,14 +153,8 @@ class _Profile extends State<Profile> {
             ),
           ),
           Center(
-
-
-
             child: ListView(
-              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -174,7 +191,10 @@ class _Profile extends State<Profile> {
                               child: Text('Submit',style: TextStyle(color: Colors.white),),
                               onPressed: () {
                                 saveForm();
-                                alterUserData('name',newName);  
+                                alterUserData('name',newName);
+                                setState(() {
+                                  userData.name=newName;
+                                });
                               },
                           ),
                         ],
@@ -186,7 +206,6 @@ class _Profile extends State<Profile> {
                        changename=!changename;
                       });
                       print('going for it');
-                  changeName();
                   },
                   ),
                 ],
@@ -198,9 +217,32 @@ class _Profile extends State<Profile> {
                     style: TextStyle(color: Colors.white),
                   ),
                   FlatButton(
-                    onPressed: null,
-                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
+                    color: Colors.cyan,
+                    onPressed: (){
+                      loadList();
+                      setState(() {
+                        changefield=!changefield;
+                      });
+                    },
+                    child: changefield==false?Text('EDIT',style: TextStyle(color: Colors.white),):DropdownButton(
+    //value: selectedYear,
+    hint: selectedyear==null?Text('Select your year'):Text(selectedyear),
+    items: selectYear,
+    onChanged: (value) {
+      setState(() {
+        selectedyear=value;
+      });
+    },
                   ),
+                  ),
+                  RaisedButton(
+                    child: Text("Submit",style: TextStyle(color: Colors.orange),),
+                    onPressed: () {
+                    alterUserData('year',selectedyear);
+                    setState(() {
+                      userData.year=selectedyear;
+                    });
+                  },),
                 ],
               ),
               Row(
@@ -222,8 +264,7 @@ class _Profile extends State<Profile> {
                   FlatButton(
                     onPressed: () {
                       setState(() {
-                        Navigator.of(context).pushNamedAndRemoveUntil('/camera', (Route<dynamic> route)=> false);
-
+                        Navigator.of(context).pushNamed('/camera');
                       });
             },
                     child: Text('EDIT',style: TextStyle(color: Colors.white),),
@@ -274,6 +315,7 @@ class _EditProfile extends State<EditProfile> {
   @override
   void initState() {
     loadList();
+
     super.initState();
   }
 

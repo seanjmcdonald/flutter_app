@@ -13,6 +13,71 @@ https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
 http://tphangout.com/flutter-firestore-crud-reading-and-writing-data/
  */
 
+
+class FilterUsers extends StatefulWidget {
+  @override
+  _FilterUsers createState() => _FilterUsers();
+}
+
+class _FilterUsers extends State<FilterUsers> {
+  FirebaseUser user;
+  QuerySnapshot ss;
+
+  getUser() async{
+    FirebaseUser _user= await FirebaseAuth.instance.currentUser();
+    if(_user!=null){
+      setState(() {
+        user=_user;
+      });
+    }
+  }
+
+  getData() async{
+    return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').snapshots();
+
+  }
+
+  Widget search(query){
+    return StreamBuilder(
+      stream: Firestore.instance.collection('user').where('major', isEqualTo: query).snapshots(),
+      builder: (context,snapshot){
+        if(!snapshot.hasData){
+          return Text('loading');
+        }
+          return ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context,i){
+                return ListTileTheme(
+                  child:  Center(
+                    child: Text(i.toString()),
+                  //  child: Text(ss.documents[i].data['major'].toString()),
+                  ),
+                );
+                print(ss.documents[i].data['major']);
+              },
+          );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    getUser();
+    getData().then((snapshot){
+      print(snapshot.data.documents.length);
+      setState(() {
+        ss=snapshot;
+        print(snapshot.toString());
+      });
+    });
+    return Scaffold(
+      appBar: AppBar(title: Text('query'),),
+      body: search('murderer'),
+    );
+  }
+}
+
+
 class DisplayUsers extends StatefulWidget {
  // final AsyncMemoizer _memoizer = new AsyncMemoizer();
 
@@ -57,7 +122,7 @@ QuerySnapshot ss;
                    // padding: EdgeInsets.all(5.0),
                     height: 150.0,
                     child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
-                  Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['email'])],),),
+                  Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['major']),Text(ss.documents[i].data['year'])],),),
             //  ListTile(
               //selected: false,
                 //title: Text(ss.documents[i].data['uid']),
@@ -99,7 +164,7 @@ Future<LoginPage>_logOut() async{
       appBar: AppBar(
         title: Text('searched users'),
         actions: <Widget>[
-          FlatButton(onPressed: _logOut, child: Text('sign out')),
+          FlatButton(onPressed: _logOut, child: Text('sign out',style: TextStyle(color: Colors.white),)),
         ],
       ),
       body: ListUsers(),

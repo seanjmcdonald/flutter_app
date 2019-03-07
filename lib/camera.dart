@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:async/async.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'userobject.dart';
+import 'profilepage.dart';
 /*
 
 https://www.youtube.com/watch?v=kNe4Fw3zkKY
@@ -31,7 +32,9 @@ class _CameraApp extends State<CameraApp> {
 
   changeProfilePicture() {
       //check logged in
-    Firestore.instance.collection('user').document(user.uid).updateData({"imgurl":location});
+    Firestore.instance.collection('user').document(user.uid).updateData({"imgurl":location}).catchError((e){
+      print(e+ 'error in changeprofilepicture');
+    });
     //  Firestore.instance.collection('user').document(userData.uid).setData(userData.toJson()).catchError((e) {
       //print(e);
   //  });
@@ -42,10 +45,12 @@ class _CameraApp extends State<CameraApp> {
       final StorageReference ref = FirebaseStorage.instance.ref().child(user.uid);
       final StorageUploadTask task = ref.putFile(image);
       String downurl = (await (await task.onComplete).ref.getDownloadURL()).toString();
-      setState(() {
-        location= downurl.toString();
-        changeProfilePicture();
-      });
+      if(downurl!=null) {
+        setState(() {
+          location = downurl.toString();
+          changeProfilePicture();
+        });
+      }
     }
   }
 
@@ -127,7 +132,9 @@ class _CameraApp extends State<CameraApp> {
               SizedBox(height: 40.0,width: 110.0,
                 child: RaisedButton(child:
                 Text('back to profile'),
-                  onPressed:() => Navigator.of(context).pushNamedAndRemoveUntil('/Profile', (Route<dynamic> route)=> false),
+                  onPressed:() {
+                    Navigator.of(context).pushNamed('/Profile');
+    },
 
                    // Navigator.pushNamed(context,'/Profile'),
                   color: Colors.red,
