@@ -22,7 +22,8 @@ class CreateQuery extends StatefulWidget {
 class _CreateQuery extends State<CreateQuery> {
   List<DropdownMenuItem<String>> selectYear = [];
   List<DropdownMenuItem<String>> selectMajor = [];
-  String selectedYear='none';
+  String selectedYear='';
+  String selectedMajor='';
   bool showSearch=false;
 
   UserData userData = new UserData();
@@ -41,6 +42,52 @@ class _CreateQuery extends State<CreateQuery> {
   getData() async{
     return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
   }
+
+  /*
+  filterUsers(category,value){
+    getFilteredData(category, value).then((snapshot){
+      setState(() {
+        ss=snapshot;
+      });
+    });
+  }
+*/
+
+
+  //getFilteredData(category,value) async{
+  //  return await Firestore.instance.collection('user').where(category, isEqualTo:value).getDocuments();
+  //}
+
+  filterUsers(selectedYear,selectedMajor){
+    getFilteredData(selectedYear, selectedMajor).then((snapshot){
+      setState(() {
+        ss=snapshot;
+      });
+    });
+  }
+
+  getFilteredData(selectedYear,selectedMajor) async{
+    if(selectedMajor!='' && selectedYear!=''){
+      return await Firestore.instance.collection('user').where('year', isEqualTo:selectedYear).where('major',isEqualTo: selectedMajor).getDocuments();
+
+    }
+    if(selectedYear!='') {
+      return await Firestore.instance.collection('user').where('year', isEqualTo: selectedYear).getDocuments();
+    }
+    if(selectedMajor!='') {
+      return await Firestore.instance.collection('user').where('major', isEqualTo: selectedMajor).getDocuments();
+    }
+
+    else {
+      return await Firestore.instance.collection('user').getDocuments();
+
+    }
+
+  }
+
+  //getFilteredData(category,value) async{
+  //  return await Firestore.instance.collection('user').where(category, isEqualTo:value).getDocuments();
+//  }
 
   loadYear(){
     selectYear.add(DropdownMenuItem(
@@ -65,13 +112,41 @@ class _CreateQuery extends State<CreateQuery> {
     ));
     selectYear.add(DropdownMenuItem(
       child: Text('clear'),
-      value: 'none',
+      value: '',
+    ));
+  }
+
+  loadMajor(){
+    selectMajor.add(DropdownMenuItem(
+      child: Text('Computer Science'),
+      value: 'Computer Science',
+    ));
+    selectMajor.add(DropdownMenuItem(
+      child: Text('Math'),
+      value: 'Math',
+    ));
+    selectMajor.add(DropdownMenuItem(
+      child: Text('Murderer'),
+      value: 'Murderer',
+    ));
+    selectMajor.add(DropdownMenuItem(
+      child: Text('Computer Information Systems'),
+      value: 'Computer Information Systems',
+    ));
+    selectMajor.add(DropdownMenuItem(
+      child: Text('Math'),
+      value: 'Math',
+    ));
+    selectMajor.add(DropdownMenuItem(
+      child: Text('clear'),
+      value: '',
     ));
   }
 
   @override
   void initState() {
     loadYear();
+    loadMajor();
     getData().then((snapshot){
       setState(() {
         ss=snapshot;
@@ -115,9 +190,32 @@ class _CreateQuery extends State<CreateQuery> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                  DropdownButton(
+                DropdownButton(
+                  items: selectMajor,
+                  hint: selectedMajor==''?Text('search for a major'):Text(selectedMajor),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedMajor=value;
+                    });
+                  },
+                ),
+                RaisedButton(
+                    onPressed: () {
+                      filterUsers(selectedYear, selectedMajor);
+                      print('the year is '+selectedMajor);
+                      print(showSearch);
+                      setState(() {
+                        showSearch=!showSearch;
+                      });
+                    }
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                DropdownButton(
                   items: selectYear,
-                  hint: selectedYear=='none'?Text('search for a year'):Text(selectedYear),
+                  hint: selectedYear==''?Text('search for a year'):Text(selectedYear),
                   onChanged: (value) {
                     setState(() {
                       selectedYear=value;
@@ -126,18 +224,19 @@ class _CreateQuery extends State<CreateQuery> {
                 ),
                 RaisedButton(
                     onPressed: () {
+                      filterUsers(selectedYear, selectedMajor);
+                      print('the year is '+selectedYear);
                       print(showSearch);
                       setState(() {
                         showSearch=!showSearch;
                       });
                     }
                 ),
-
-      ],
+              ],
             ),
             Container(
 
-              child:search('murderer'),
+              child:search(selectedYear),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height/1.5,
             )
@@ -180,6 +279,8 @@ class _FilterUsers extends State<FilterUsers> {
   getData() async{
     return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
   }
+
+
 
   Widget search(query){
     if(ss==null){
@@ -242,6 +343,7 @@ QuerySnapshot ss;
   getData() async{
     return await Firestore.instance.collection('user').getDocuments();
   }
+
 
   Widget ListUsers() {
     if(ss==null){
