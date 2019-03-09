@@ -154,7 +154,7 @@ class _CreateQuery extends State<CreateQuery> {
             child: GestureDetector(
               onTap: () {
                 print('tapped');
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DisplayUserPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DisplayUserPage(userDocument: ss.documents[i])));
               },
             child: Row(
              // crossAxisAlignment: CrossAxisAlignment.center,
