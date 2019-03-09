@@ -7,6 +7,7 @@ import 'logout.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
+import 'displayuserpage.dart';
 import 'dart:math' as math;
 /*
 https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
@@ -150,6 +151,11 @@ class _CreateQuery extends State<CreateQuery> {
         return ListTileTheme(
           child: Container(
             color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
+            child: GestureDetector(
+              onTap: () {
+                print('tapped');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DisplayUserPage()));
+              },
             child: Row(
              // crossAxisAlignment: CrossAxisAlignment.center,
 
@@ -167,7 +173,7 @@ class _CreateQuery extends State<CreateQuery> {
                     Text(ss.documents[i].data['year'],textAlign: TextAlign.center,style: TextStyle(color: Colors.grey,fontSize: 25),)],),),
               ],
             ),
-
+          ),
           ),
         );
       },
@@ -181,7 +187,6 @@ class _CreateQuery extends State<CreateQuery> {
       appBar: AppBar(title: Text('search for users',style: TextStyle(color: Colors.lightBlue),),
       backgroundColor: Colors.white,),
       body: ListView(
-
          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Row(
