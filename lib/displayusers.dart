@@ -43,21 +43,6 @@ class _CreateQuery extends State<CreateQuery> {
     return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
   }
 
-  /*
-  filterUsers(category,value){
-    getFilteredData(category, value).then((snapshot){
-      setState(() {
-        ss=snapshot;
-      });
-    });
-  }
-*/
-
-
-  //getFilteredData(category,value) async{
-  //  return await Firestore.instance.collection('user').where(category, isEqualTo:value).getDocuments();
-  //}
-
   filterUsers(selectedYear,selectedMajor){
     getFilteredData(selectedYear, selectedMajor).then((snapshot){
       setState(() {
@@ -166,12 +151,20 @@ class _CreateQuery extends State<CreateQuery> {
           child: Container(
             color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
             child: Row(
+             // crossAxisAlignment: CrossAxisAlignment.center,
+
               children: <Widget>[
                 Container(
                   width: 100.0,
                   height: 150.0,
                   child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
-                Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['major']),Text(ss.documents[i].data['year'])],),),
+                Container(
+                  width: MediaQuery.of(context).size.width-100,
+                  alignment: Alignment.center,
+                  child: Column(children: <Widget>[
+                    Text(ss.documents[i].data['name'],textAlign: TextAlign.center,style: TextStyle(color: Colors.white,fontSize: 35),),
+                    Text(ss.documents[i].data['major'],textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontSize: 25),),
+                    Text(ss.documents[i].data['year'],textAlign: TextAlign.center,style: TextStyle(color: Colors.grey,fontSize: 25),)],),),
               ],
             ),
 
@@ -184,61 +177,59 @@ class _CreateQuery extends State<CreateQuery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('search for users'),),
+      backgroundColor: Colors.lightBlue,
+      appBar: AppBar(title: Text('search for users',style: TextStyle(color: Colors.lightBlue),),
+      backgroundColor: Colors.white,),
       body: ListView(
+
          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Row(
               children: <Widget>[
                 DropdownButton(
                   items: selectMajor,
-                  hint: selectedMajor==''?Text('search for a major'):Text(selectedMajor),
+                  hint: selectedMajor==''?Text('search for a major',style: TextStyle(color: Colors.white),):Text(selectedMajor,style: TextStyle(color: Colors.white),),
                   onChanged: (value) {
                     setState(() {
                       selectedMajor=value;
                     });
                   },
                 ),
-                RaisedButton(
-                    onPressed: () {
-                      filterUsers(selectedYear, selectedMajor);
-                      print('the year is '+selectedMajor);
-                      print(showSearch);
-                      setState(() {
-                        showSearch=!showSearch;
-                      });
-                    }
-                ),
+
               ],
             ),
             Row(
               children: <Widget>[
                 DropdownButton(
                   items: selectYear,
-                  hint: selectedYear==''?Text('search for a year'):Text(selectedYear),
+                  hint: selectedYear==''?Text('search for a year',style: TextStyle(color: Colors.white),):Text(selectedYear,style: TextStyle(color: Colors.white),),
                   onChanged: (value) {
                     setState(() {
                       selectedYear=value;
                     });
                   },
                 ),
-                RaisedButton(
-                    onPressed: () {
-                      filterUsers(selectedYear, selectedMajor);
-                      print('the year is '+selectedYear);
-                      print(showSearch);
-                      setState(() {
-                        showSearch=!showSearch;
-                      });
-                    }
-                ),
+
               ],
             ),
-            Container(
+            RaisedButton(
 
+              color: Colors.black,
+                child: Text('Search',style: TextStyle(color: Colors.white),),
+                onPressed: () {
+                  filterUsers(selectedYear, selectedMajor);
+                  print('the year is '+selectedMajor);
+                  setState(() {
+                    showSearch=!showSearch;
+                  });
+                }
+            ),
+            Container(
+              alignment: Alignment.topCenter,
               child:search(selectedYear),
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height/1.5,
+              height: MediaQuery.of(context).size.height/1.85,
+//              height: MediaQuery.of(context).size.height-36-2*24-24-,
             )
           ],
         ),
@@ -246,171 +237,3 @@ class _CreateQuery extends State<CreateQuery> {
   }
 }
 
-
-
-class FilterUsers extends StatefulWidget {
-  @override
-  _FilterUsers createState() => _FilterUsers();
-}
-
-class _FilterUsers extends State<FilterUsers> {
-  UserData userData = new UserData();
-  FirebaseUser user;
-  QuerySnapshot ss;
-
-  getUser() async{
-    FirebaseUser _user= await FirebaseAuth.instance.currentUser();
-    if(_user!=null){
-      setState(() {
-        user=_user;
-      });
-    }
-  }
-
-  initState() {
-    getData().then((snapshot){
-      setState(() {
-        ss=snapshot;
-      });
-    });
-    super.initState();
-  }
-
-  getData() async{
-    return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
-  }
-
-
-
-  Widget search(query){
-    if(ss==null){
-      return Center(child: Column(children: <Widget>[Text('loading...')],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),);
-    }
-          return ListView.builder(
-              itemCount: ss.documents.length,
-              itemBuilder: (context,i){
-                return ListTileTheme(
-                  child: Container(
-                    color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          width: 100.0,
-                          height: 150.0,
-                          child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
-                        Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['major']),Text(ss.documents[i].data['year'])],),),
-                      ],
-                    ),
-
-                  ),
-                );
-              },
-          );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(title: Text('query'),),
-      body: ss!=null?search('murderer'):Text('loading'),
-    );
-  }
-}
-
-
-class DisplayUsers extends StatefulWidget {
- // final AsyncMemoizer _memoizer = new AsyncMemoizer();
-
-  @override
-  _DisplayUsers createState() => _DisplayUsers();
-
-}
-
-class _DisplayUsers extends State<DisplayUsers> {
-UserData userData = new UserData();
-QuerySnapshot ss;
-
-  initState() {
-    getData().then((snapshot){
-      setState(() {
-        print('loading ss');
-        ss=snapshot;
-      });
-    });
-    super.initState();
-  }
-  getData() async{
-    return await Firestore.instance.collection('user').getDocuments();
-  }
-
-
-  Widget ListUsers() {
-    if(ss==null){
-      return Center(child: Column(children: <Widget>[Text('loading...')],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),);
-    }
-    return ListView.builder(
-      itemCount: ss.documents.length,
-        //padding: EdgeInsets.all(5.0),
-        itemBuilder: (context,i){
-          return ListTileTheme(
-            child: Container(
-              //width: MediaQuery.of(context).size.width,
-              color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0)
-              ,
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 100.0,
-                   // padding: EdgeInsets.all(5.0),
-                    height: 150.0,
-                    child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
-                  Container(child: Column(children: <Widget>[Text(ss.documents[i].data['name']),Text(ss.documents[i].data['major']),Text(ss.documents[i].data['year'])],),),
-            //  ListTile(
-              //selected: false,
-                //title: Text(ss.documents[i].data['uid']),
-               // subtitle: Text(ss.documents[i].data['major']),
-             // ),
-                ],
-              ),
-
-          ),
-            );
-      /*      child: ListTile(
-              selected: false,
-              title: Text(ss.documents[i].data['uid']),
-              subtitle: Text(ss.documents[i].data['major']),
-              onTap: () {
-                setState(() {
-
-                  Text('sdsd');
-                  print('asdad');
-                });
-
-              }
-            ), */
-
-        });
-  }
-
-Future<LoginPage>_logOut() async{
-  await FirebaseAuth.instance.signOut().then((_){
-    Navigator.of(context).pushNamedAndRemoveUntil('/login',ModalRoute.withName('/'));});
-  return LoginPage();
-}
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('searched users'),
-        actions: <Widget>[
-          FlatButton(onPressed: _logOut, child: Text('sign out',style: TextStyle(color: Colors.white),)),
-        ],
-      ),
-      body: ListUsers(),
-    );
-  }
-}

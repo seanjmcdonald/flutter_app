@@ -56,7 +56,7 @@ class _HomeScreen extends State<HomeScreen> {
 
   final List<Widget> renderedPages =[
     CameraApp(),
-    DisplayUsers(),
+    CreateQuery(),
     Profile(),
    // FilterUsers(),
     CreateQuery(),

@@ -28,7 +28,6 @@ class SeniorProject extends StatelessWidget{
         '/login':(context)=> new LoginPage(),
         '/Profile':(context)=> new Profile(),
         '/EditProfile':(context)=> new EditProfile(),
-        '/DisplayUsers':(context)=> new DisplayUsers(),
         '/createaccount':(context)=> new CreateAccountPage(),
         '/camera':(context)=> new CameraApp(),
 
