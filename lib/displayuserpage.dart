@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'logout.dart';
 
 class DisplayUserPage extends StatefulWidget {
   DocumentSnapshot userDocument;
@@ -17,7 +18,8 @@ class _DisplayUserPage extends State<DisplayUserPage> {
       ss='${widget.userDocument}';
     });
     return Scaffold(
-      appBar: AppBar(title: Text('Profile of '+'${widget.userDocument['name']}'),),
+      appBar: AppBar(
+        title: Text('Profile of '+'${widget.userDocument['name']}'),),
       body: ListView(
         children: <Widget>[
           Container(
@@ -29,14 +31,24 @@ class _DisplayUserPage extends State<DisplayUserPage> {
             alignment: Alignment.center,
             child: Text('${widget.userDocument['name']}',style: TextStyle(fontSize: 40),),
           ),
-
           Container(
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['major']}',style: TextStyle(fontSize: 20),),
+            child: Text('${widget.userDocument['major']}',style: TextStyle(fontSize: 30),),
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['name']}',style: TextStyle(fontSize: 40),),
+            child: Text('${widget.userDocument['year']}',style: TextStyle(fontSize: 20),),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Text('Classes Taken: CINS-465 , CSCI-430',style: TextStyle(fontSize: 20),),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height/5,
+            child:
+          SingleChildScrollView(
+            child: Text('${widget.userDocument['bio']}'),
+          ),
           ),
           //Image.network(ss['imgurl']);
         ],

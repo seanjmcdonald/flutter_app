@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'dart:async';
 //import 'package:async/async.dart';
-import 'logout.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
@@ -38,6 +37,13 @@ class _CreateQuery extends State<CreateQuery> {
         user=_user;
       });
     }
+  }
+
+  Future<LoginPage>_logOut() async{
+    await FirebaseAuth.instance.signOut().then((_){
+      Navigator.of(context).pushNamedAndRemoveUntil('/login',(Route<dynamic> route) => false);
+    });
+    return LoginPage();
   }
 
   getData() async{
@@ -116,6 +122,10 @@ class _CreateQuery extends State<CreateQuery> {
       value: 'Murderer',
     ));
     selectMajor.add(DropdownMenuItem(
+      child: Text('Princess'),
+      value: 'Princess',
+    ));
+    selectMajor.add(DropdownMenuItem(
       child: Text('Computer Information Systems'),
       value: 'Computer Information Systems',
     ));
@@ -150,12 +160,14 @@ class _CreateQuery extends State<CreateQuery> {
       itemBuilder: (context,i){
         return ListTileTheme(
           child: Container(
+            width: MediaQuery.of(context).size.width,
             color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
             child: GestureDetector(
               onTap: () {
                 print('tapped');
                 Navigator.push(context, MaterialPageRoute(builder: (context) => DisplayUserPage(userDocument: ss.documents[i])));
               },
+              behavior: HitTestBehavior.opaque,
             child: Row(
              // crossAxisAlignment: CrossAxisAlignment.center,
 
@@ -184,7 +196,11 @@ class _CreateQuery extends State<CreateQuery> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue,
-      appBar: AppBar(title: Text('search for users',style: TextStyle(color: Colors.lightBlue),),
+      appBar: AppBar(
+        actions: <Widget>[
+          FlatButton(onPressed: _logOut, child: Text('sign out',style: TextStyle(color: Colors.black),)),
+        ],
+        title: Text('search for users',style: TextStyle(color: Colors.lightBlue),),
       backgroundColor: Colors.white,),
       body: ListView(
          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,

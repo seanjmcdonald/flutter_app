@@ -56,6 +56,7 @@ class _Profile extends State<Profile> {
   }
 
   getFromFirebase() async {
+    print('trying '+userData.uid);
     final DocumentReference postRef = Firestore.instance.document("user/"+userData.uid);
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
@@ -117,13 +118,15 @@ class _Profile extends State<Profile> {
   Widget build(BuildContext context) {
     //fix??
     getUserInfo();
-    if(userData.uid!='default'){
+    if(userData.uid!='default' && ss==null){
       getFromFirebase();
     }
 
-    if(ss!=null) {
+    if(ss!=null&& userData.major=='default') {
       setLocal();
     }
+
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
 
@@ -346,7 +349,6 @@ class _EditProfile extends State<EditProfile> {
 
   @override
   void initState() {
-    loadList();
 
     super.initState();
   }

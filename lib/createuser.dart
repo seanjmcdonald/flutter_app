@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'userobject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'userobject.dart';
 import 'home.dart';
 
 class CreateAccountWithEmail{
@@ -35,6 +36,7 @@ class _CreateAccountPage extends State<CreateAccountPage> {
     }
   }
 
+  //not signed in here
   setInitUser() async{
     //check logged in
     Firestore.instance.collection('user').document(userData.uid).setData(userData.toJson()).catchError((e) {
@@ -45,8 +47,16 @@ class _CreateAccountPage extends State<CreateAccountPage> {
   Future<void> createSignIn(String email,String pass) async{
     final newUser= await auth.createUserWithEmailAndPassword(email: email, password: pass);
     auth.signInWithEmailAndPassword(email: email, password: pass);
+    FirebaseUser _user = await FirebaseAuth.instance.currentUser();
+    if(auth!=null && _user!=null){
+      print('please');
+      setState(() {
 
-    if(auth!=null){
+        userData.email=email;
+        userData.uid=_user.uid;
+      });
+
+      setInitUser();
       print('not null');
       Navigator.pushNamed(context, '/');
   }

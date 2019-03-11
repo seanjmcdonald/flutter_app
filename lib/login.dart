@@ -33,7 +33,7 @@ class _LoginPage extends State<LoginPage> {
         assert(user!=null);
         assert(await user.getIdToken()!=null);
         assert(FirebaseAuth.instance.currentUser() != null);
-        Navigator.push(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
+        Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
 
       } catch(e){
         print(e.message);
