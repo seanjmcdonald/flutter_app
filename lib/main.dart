@@ -3,6 +3,7 @@ import 'homescreen.dart';
 import 'login.dart';
 import 'profilepage.dart';
 import 'displayusers.dart';
+import 'chat.dart';
 import 'createuser.dart';
 import 'camera.dart';
 
@@ -26,6 +27,7 @@ class SeniorProject extends StatelessWidget{
         '/homepage':(context)=> new HomeScreen(),
         '/':(context)=> new HomeScreen(),
         '/login':(context)=> new LoginPage(),
+        '/chat':(context)=> new Chat(),
         '/Profile':(context)=> new Profile(),
         '/EditProfile':(context)=> new EditProfile(),
         '/createaccount':(context)=> new CreateAccountPage(),

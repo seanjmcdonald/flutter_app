@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 //import 'package:async/async.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'main.dart';
 import 'displayuserpage.dart';
 import 'dart:math' as math;
 /*

@@ -3,8 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'userobject.dart';
-import 'main.dart';
-import 'camera.dart';
 
 class Profile extends StatefulWidget{
 
@@ -198,6 +196,7 @@ class _Profile extends State<Profile> {
                                 alterUserData('name',newName);
                                 setState(() {
                                   userData.name=newName;
+                                  changename=!changename;
                                 });
                               },
                           ),

@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'userobject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'userobject.dart';
-import 'home.dart';
+import 'homescreen.dart';
 
 class CreateAccountWithEmail{
   Future<FirebaseUser> createSignIn(email,password){
@@ -49,17 +48,11 @@ class _CreateAccountPage extends State<CreateAccountPage> {
     auth.signInWithEmailAndPassword(email: email, password: pass);
     FirebaseUser _user = await FirebaseAuth.instance.currentUser();
     if(auth!=null && _user!=null){
-      print('please');
-      setState(() {
-
-        userData.email=email;
-        userData.uid=_user.uid;
-      });
-
-      setInitUser();
+      //setInitUser();
       print('not null');
-      Navigator.pushNamed(context, '/');
-  }
+      Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> HomeScreen()));
+
+    }
     /*
     assert(newUser!=null);
     assert(await newUser.getIdToken()!=null);

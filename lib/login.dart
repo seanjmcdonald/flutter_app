@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'homescreen.dart';
-import 'createuser.dart';
-import 'main.dart';
+
 
 class loginData{
   String email='';
