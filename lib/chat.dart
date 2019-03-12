@@ -142,6 +142,8 @@ class TwoPersonChat extends StatefulWidget{
 class _TwoPersonChat extends State<TwoPersonChat> {
   TextEditingController textController= TextEditingController();
   FirebaseUser user;
+  FocusNode _focusNode=FocusNode();
+
 
   void sendMessage(data) {
     Firestore.instance.runTransaction((transaction) async {
@@ -170,7 +172,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
   Widget get_chat(){
     return StreamBuilder(
       stream: Firestore.instance.collection('messages').document('${widget.object.groupchatid}').collection('${widget.object.groupchatid}').
-      orderBy('time',descending: false).limit(20).snapshots(),
+      orderBy('time',descending: true).limit(100).snapshots(),
 //      stream: Firestore.instance.collection('messags').document('groupchatid').collection('groupchatid').snapshots(),
       builder: (context, snapshot){
         if(!snapshot.hasData) {
@@ -180,9 +182,9 @@ class _TwoPersonChat extends State<TwoPersonChat> {
         } else {
           var listmessage =snapshot.data.documents;
           return ListView.builder(
-            padding: EdgeInsets.all(23.0),
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context,index) => buildList(index,snapshot.data.documents[index]),
+            reverse: true,
           );
         }
       },
@@ -192,7 +194,8 @@ class _TwoPersonChat extends State<TwoPersonChat> {
   Widget buildList(index,data){
     return ListTileTheme(
       child: Container(
-        child: (user.email==data['fromUser'])?Container(child: Text(data['content'],textAlign: TextAlign.left,),):Container(child: Text(data['content'],textAlign: TextAlign.right,),),
+        padding: EdgeInsets.all(5),
+        child: (user.email==data['fromUser'])?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right: 15),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.yellow,fontSize: 20),),),
       )
     );
   }
@@ -201,47 +204,52 @@ class _TwoPersonChat extends State<TwoPersonChat> {
   Widget build(BuildContext context) {
     getUser();
     return Scaffold(
+      //backgroundColor: Colors.blue,
       appBar: AppBar(title: Text('${widget.object.toUser}'),),
-      body: Container(
-        child: Column(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
+
+            Flexible(
+              flex: 30,
+              child:
               Container(
-                height: MediaQuery.of(context).size.height*8/11,
+                height: MediaQuery.of(context).size.height/10*10,
                 color: Colors.blue,
-                alignment: Alignment.bottomCenter,
                 child: get_chat(),
               ),
-              Row(
-
+            ),
+              Flexible(
+                flex: 3,
+                child: Row(
                 children: <Widget>[
-                  Flexible(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height*1/11,
+                    Container(
+                      height: MediaQuery.of(context).size.height*4/23,
+                      width: MediaQuery.of(context).size.width*9/11,
                       color: Colors.red,
 
-                      alignment: Alignment.bottomCenter,
-                      child: TextField(
+                    child: TextField(
+                      onTap: ()=> _focusNode.hasFocus,
+                        style: TextStyle(fontSize: 20),
                         controller: textController,
-                        decoration: InputDecoration(
-                          hintText: '...',
-
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'type here...',
                         ),
                       ),
                     ),
 
-                  ),
-                  Material(
-                    color: Colors.red,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height/11,
+                      Expanded(
+                        child: Container(
+                      color: Colors.red,
+                      height: MediaQuery.of(context).size.height*4/23,
                       child: IconButton(icon: Icon(Icons.send), onPressed: ()=>sendMessage(textController.text)),
                     ),
-                  ),
+    ),
                 ],
-              )
+              ),
+              ),
           ],
         ),
-      ),
     );
   }
 }
