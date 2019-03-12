@@ -62,6 +62,7 @@ class _Chat extends State<Chat> {
     return ListTileTheme(
       child: Container(
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: (){
             if(user!=null &&data!=null) {
               print('not null');
@@ -70,14 +71,14 @@ class _Chat extends State<Chat> {
                 setState(() {
                   users.groupchatid=user.email+' '+data['email'];
                   users.toUser=data['email'];
-                  users.fromUser=user.uid;
+                  users.fromUser=user.email;
                 });
 
               } else {
                 setState(() {
                   users.groupchatid=data['email']+' '+user.email;
                   users.toUser=data['email'];
-                  users.fromUser=user.uid;
+                  users.fromUser=user.email;
                 });
 
               }
@@ -95,7 +96,6 @@ class _Chat extends State<Chat> {
               Container(
                 child: Text(data['name']),
               ),
-              Container(child: Text(DateTime.now().millisecondsSinceEpoch.toString()),),
             ],
           ),
         ),
@@ -170,7 +170,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
   Widget get_chat(){
     return StreamBuilder(
       stream: Firestore.instance.collection('messages').document('${widget.object.groupchatid}').collection('${widget.object.groupchatid}').
-      orderBy('time',descending: true).limit(20).snapshots(),
+      orderBy('time',descending: false).limit(20).snapshots(),
 //      stream: Firestore.instance.collection('messags').document('groupchatid').collection('groupchatid').snapshots(),
       builder: (context, snapshot){
         if(!snapshot.hasData) {
@@ -191,8 +191,8 @@ class _TwoPersonChat extends State<TwoPersonChat> {
 
   Widget buildList(index,data){
     return ListTileTheme(
-      child: Container(child:
-        Text(data['content']),
+      child: Container(
+        child: (user.email==data['fromUser'])?Container(child: Text(data['content'],textAlign: TextAlign.left,),):Container(child: Text(data['content'],textAlign: TextAlign.right,),),
       )
     );
   }
@@ -211,27 +211,34 @@ class _TwoPersonChat extends State<TwoPersonChat> {
                 alignment: Alignment.bottomCenter,
                 child: get_chat(),
               ),
-              Flexible(
-                child: Container(
-                  height: MediaQuery.of(context).size.height*1/11,
-                  color: Colors.red,
+              Row(
 
-                  alignment: Alignment.bottomCenter,
-                  child: TextField(
-                    controller: textController,
-                    decoration: InputDecoration(
-                      hintText: '...',
+                children: <Widget>[
+                  Flexible(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height*1/11,
+                      color: Colors.red,
 
+                      alignment: Alignment.bottomCenter,
+                      child: TextField(
+                        controller: textController,
+                        decoration: InputDecoration(
+                          hintText: '...',
+
+                        ),
+                      ),
+                    ),
+
+                  ),
+                  Material(
+                    color: Colors.red,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height/11,
+                      child: IconButton(icon: Icon(Icons.send), onPressed: ()=>sendMessage(textController.text)),
                     ),
                   ),
-                ),
-
-              ),
-              Material(
-                child: Container(
-                  child: IconButton(icon: Icon(Icons.send), onPressed: ()=>sendMessage(textController.text)),
-                ),
-              ),
+                ],
+              )
           ],
         ),
       ),
