@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:async/async.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 
@@ -146,20 +147,33 @@ class _TwoPersonChat extends State<TwoPersonChat> {
 
 
   void sendMessage(data) {
-    Firestore.instance.runTransaction((transaction) async {
-      print('in message');
-      var documentReference = Firestore.instance.collection('messages').document('${widget.object.groupchatid}').collection('${widget.object.groupchatid}').document();
-      await transaction.set(
-          documentReference,
-          {
-            'fromUser':'${widget.object.fromUser}',
-            'toUser':'${widget.object.toUser}',
-            'time':DateTime.now().millisecondsSinceEpoch.toString(),
-            'content':data.toString(),
-          }
-      );
-      print('message send');
-    });
+
+    if (data.trim()!='') {
+      textController.clear();
+
+      Firestore.instance.runTransaction((transaction) async {
+        print('in message');
+        var documentReference = Firestore.instance.collection('messages')
+            .document('${widget.object.groupchatid}').collection(
+            '${widget.object.groupchatid}')
+            .document();
+        await transaction.set(
+            documentReference,
+            {
+              'fromUser': '${widget.object.fromUser}',
+              'toUser': '${widget.object.toUser}',
+              'time': DateTime
+                  .now()
+                  .millisecondsSinceEpoch
+                  .toString(),
+              'content': data.toString(),
+            }
+        );
+        print('message send');
+      });
+    } else {
+      Fluttertoast.showToast(msg: 'Enter a Message!');
+    }
   }
 
   getUser() async {
@@ -169,8 +183,51 @@ class _TwoPersonChat extends State<TwoPersonChat> {
     });
   }
 
+  Widget chat_bar(){
+    return Container(
+      height: 50,
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+
+        color: Colors.green,
+        border: Border(top: BorderSide(color: Colors.blueGrey,width: 1))
+      ),
+      child: Row(
+        children: <Widget>[
+          Material(
+            child: Container(
+              height: 50,
+              color: Colors.green,
+              child: IconButton(icon: Icon(Icons.image), onPressed: null),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: TextField(
+                controller: textController,
+                decoration: InputDecoration.collapsed(
+                  border: InputBorder.none,
+                  hintText: 'Type a message here',
+                ),
+              ),
+            ),
+          ),
+          Material(
+            child: Container(
+              color: Colors.green,
+              child: IconButton(icon: Icon(Icons.send), onPressed: () =>sendMessage(textController.text)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget get_chat(){
-    return StreamBuilder(
+    return Flexible(child:StreamBuilder(
       stream: Firestore.instance.collection('messages').document('${widget.object.groupchatid}').collection('${widget.object.groupchatid}').
       orderBy('time',descending: true).limit(100).snapshots(),
 //      stream: Firestore.instance.collection('messags').document('groupchatid').collection('groupchatid').snapshots(),
@@ -188,15 +245,23 @@ class _TwoPersonChat extends State<TwoPersonChat> {
           );
         }
       },
-    );
+    ),);
   }
 
   Widget buildList(index,data){
-    return ListTileTheme(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        child: (user.email==data['fromUser'])?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right: 15),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.yellow,fontSize: 20),),),
-      )
+    return Row(
+      children: <Widget>[
+        Container(
+          width: 200,
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8)),
+          child: (user.email==data['fromUser'])?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right:5),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.yellow,fontSize: 20),),),
+        ),
+      ],
+   //     padding: EdgeInsets.all(5),
+     //   width: 20,
+       // decoration: BoxDecoration(borderRadius: BorderRadius.circular(70),color: Colors.yellow),
+        //child: (user.email==data['fromUser'])?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right:5),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.yellow,fontSize: 20),),),
     );
   }
 
@@ -204,52 +269,18 @@ class _TwoPersonChat extends State<TwoPersonChat> {
   Widget build(BuildContext context) {
     getUser();
     return Scaffold(
-      //backgroundColor: Colors.blue,
       appBar: AppBar(title: Text('${widget.object.toUser}'),),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
+      body: Stack(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              get_chat(),
+              chat_bar(),
 
-            Flexible(
-              flex: 30,
-              child:
-              Container(
-                height: MediaQuery.of(context).size.height/10*10,
-                color: Colors.blue,
-                child: get_chat(),
-              ),
-            ),
-              Flexible(
-                flex: 3,
-                child: Row(
-                children: <Widget>[
-                    Container(
-                      height: MediaQuery.of(context).size.height*4/23,
-                      width: MediaQuery.of(context).size.width*9/11,
-                      color: Colors.red,
-
-                    child: TextField(
-                      onTap: ()=> _focusNode.hasFocus,
-                        style: TextStyle(fontSize: 20),
-                        controller: textController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'type here...',
-                        ),
-                      ),
-                    ),
-
-                      Expanded(
-                        child: Container(
-                      color: Colors.red,
-                      height: MediaQuery.of(context).size.height*4/23,
-                      child: IconButton(icon: Icon(Icons.send), onPressed: ()=>sendMessage(textController.text)),
-                    ),
-    ),
-                ],
-              ),
-              ),
-          ],
-        ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
