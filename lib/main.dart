@@ -8,6 +8,7 @@ import 'createuser.dart';
 import 'camera.dart';
 
 
+
 void main() {
   runApp(new SeniorProject());
 }
@@ -20,8 +21,6 @@ class SeniorProject extends StatelessWidget{
       title: 'Senior Project',
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
-        //canvasColor: Colors.black,
-        //primaryColor: Colors.orange,
       ),
       routes: <String,WidgetBuilder>{
         '/homepage':(context)=> new HomeScreen(),

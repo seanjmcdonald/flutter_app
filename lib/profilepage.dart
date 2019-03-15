@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'userobject.dart';
+import 'login.dart';
 
 class Profile extends StatefulWidget{
 
@@ -18,14 +19,30 @@ class _Profile extends State<Profile> {
   bool changename=false;
   bool changefield=false;
   bool changemajor=false;
+  bool changeyear=false;
   final GlobalKey<FormState>_formKey= new GlobalKey<FormState>();
   String newMajor,newName,newYear,selectedyear;
  //changefield=false;
   //changename=false;
 
+  @override
+  void initState(){
+    loadList();
+    super.initState();
+  }
+
+
+  Future<LoginPage>_logOut() async{
+    await FirebaseAuth.instance.signOut().then((_){
+      Navigator.of(context).pushNamedAndRemoveUntil('/login',(Route<dynamic> route) => false);
+    });
+    return LoginPage();
+  }
+
+
   loadList(){
     selectYear.add(DropdownMenuItem(
-      child: Text('Freshman'),
+      child: Text('Freshman',),
       value: 'freshman',
     ));
     selectYear.add(DropdownMenuItem(
@@ -115,7 +132,9 @@ class _Profile extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     //fix??
+
     getUserInfo();
+
     if(userData.uid!='default' && ss==null){
       getFromFirebase();
     }
@@ -128,18 +147,16 @@ class _Profile extends State<Profile> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
 
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.teal,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.account_circle),
-            onPressed: () {
-            print('pressed edit');
-              Navigator.pushNamed(context, '/EditProfile');
-            },
+          IconButton(color: Colors.teal,icon: Icon(Icons.exit_to_app),
+            onPressed: () => _logOut()
           ),
-
         ],
-        title: Text('user profile'),
+        title: Text('Edit Profile',style: TextStyle(color: Colors.teal),),
       ),
       body:(ss==null)?Center(child: Column(children: <Widget>[Text('loading...',style: TextStyle(color: Colors.white),)],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),):Stack(
         children: <Widget>[
@@ -157,17 +174,16 @@ class _Profile extends State<Profile> {
           Center(
             child: ListView(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text('email: '+userData.email,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  FlatButton(
-                    onPressed: null,
-                    child: Text('EDIT',style: TextStyle(color: Colors.white),),
-                  ),
-                ],
+              Center( child:
+                Padding( padding: EdgeInsets.symmetric(vertical: 10),child:
+                  Container(
+                    child:
+                      Text('email: '+userData.email,
+                        style:
+                          TextStyle(color: Colors.white),
+                      ),
+                    ),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -219,33 +235,37 @@ class _Profile extends State<Profile> {
                   Text('year: '+userData.year,
                     style: TextStyle(color: Colors.white),
                   ),
-                  FlatButton(
-                    color: Colors.cyan,
-                    onPressed: (){
-                      loadList();
-                      setState(() {
-                        changefield=!changefield;
-                      });
-                    },
-                    child: changefield==false?Text('EDIT',style: TextStyle(color: Colors.white),):DropdownButton(
-    //value: selectedYear,
-    hint: selectedyear==null?Text('Select your year'):Text(selectedyear),
-    items: selectYear,
-    onChanged: (value) {
-      setState(() {
-        selectedyear=value;
-      });
-    },
-                  ),
-                  ),
-                  RaisedButton(
-                    child: Text("Submit",style: TextStyle(color: Colors.orange),),
-                    onPressed: () {
-                    alterUserData('year',selectedyear);
-                    setState(() {
-                      userData.year=selectedyear;
-                    });
-                  },),
+                  Column(
+                    children: <Widget>[
+                      FlatButton(
+                        onPressed: (){
+                          setState(() {
+                            changeyear=!changeyear;
+                          });
+                        },
+                        child: changeyear==false?Text('EDIT',style: TextStyle(color: Colors.white),):DropdownButton(
+                          //value: selectedYear,
+                          hint: selectedyear==null?Text('Select your year'):Text(selectedyear,style: TextStyle(color: Colors.white),),
+                          items: selectYear,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedyear=value;
+                            });
+                          },
+                        ),
+                      ),
+                      changeyear?RaisedButton(
+                        child: Text("Submit",style: TextStyle(color: Colors.orange),),
+                        onPressed: () {
+                          alterUserData('year',selectedyear);
+                          setState(() {
+                            changeyear=false;
+                            userData.year=selectedyear;
+                          });
+                        },):Container(),
+                    ],
+                  )
+
                 ],
               ),
               Row(

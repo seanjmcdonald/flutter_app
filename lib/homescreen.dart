@@ -101,10 +101,10 @@ class _HomeScreen extends State<HomeScreen> {
       bottomNavigationBar:
           Theme(
             data: Theme.of(context).copyWith(
-              canvasColor: Colors.green,
+              canvasColor: Colors.white,
             ),
         child: BottomNavigationBar(
-          fixedColor: Colors.white,
+          fixedColor: Colors.teal,
           currentIndex: currentPage,
           onTap: setCurrentPage,
           items: [

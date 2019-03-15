@@ -168,8 +168,6 @@ class _CreateQuery extends State<CreateQuery> {
               },
               behavior: HitTestBehavior.opaque,
             child: Row(
-             // crossAxisAlignment: CrossAxisAlignment.center,
-
               children: <Widget>[
                 Container(
                   width: 100.0,
@@ -194,12 +192,14 @@ class _CreateQuery extends State<CreateQuery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: Colors.teal,
       appBar: AppBar(
         actions: <Widget>[
-          FlatButton(onPressed: _logOut, child: Text('sign out',style: TextStyle(color: Colors.black),)),
+          FlatButton(onPressed: _logOut, child: IconButton(color: Colors.teal,icon: Icon(Icons.exit_to_app), onPressed: ()=> _logOut()),),
         ],
-        title: Text('search for users',style: TextStyle(color: Colors.lightBlue),),
+        title: Text('Search For Users',style: TextStyle(color: Colors.teal),
+        
+        ),
       backgroundColor: Colors.white,),
       body: ListView(
          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -234,8 +234,8 @@ class _CreateQuery extends State<CreateQuery> {
             ),
             RaisedButton(
 
-              color: Colors.black,
-                child: Text('Search',style: TextStyle(color: Colors.white),),
+              color: Colors.white,
+                child: Text('Search',style: TextStyle(color: Colors.teal),),
                 onPressed: () {
                   filterUsers(selectedYear, selectedMajor);
                   print('the year is '+selectedMajor);

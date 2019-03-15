@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'login.dart';
 
+
+/*
+https://medium.com/flutter-community/building-a-chat-app-with-flutter-and-firebase-from-scratch-9eaa7f41782e
+ */
 
 
 class  MessageUsers {
@@ -136,16 +141,26 @@ class _Chat extends State<Chat> {
     );
   }
 
+  Future<LoginPage>_logOut() async{
+    await FirebaseAuth.instance.signOut().then((_){
+      Navigator.of(context).pushNamedAndRemoveUntil('/login',(Route<dynamic> route) => false);
+    });
+    return LoginPage();
+  }
+
   @override
   Widget build(BuildContext context) {
     getUser();
     return Scaffold(
-      appBar: AppBar(title: Text('Message Users',style: TextStyle(color: Colors.teal)),centerTitle: true,backgroundColor: Colors.white,),
+      appBar: AppBar(title: Text('Message Users',style: TextStyle(color: Colors.teal)),centerTitle: true,backgroundColor: Colors.white,
+      actions: <Widget>[
+        IconButton(color: Colors.teal,icon: Icon(Icons.exit_to_app), onPressed: ()=> _logOut()),
+      ],
+      ),
         body: chat(),
     );
   }
 }
-
 class TwoPersonChat extends StatefulWidget{
   MessageUsers object;
   TwoPersonChat({Key key, this.object}): super(key:key);
@@ -264,7 +279,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
     return Row(
       children: <Widget>[
         Container(
-          width: 200,
+          width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.all(5),
           decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8)),
           child: (user.email==data['fromUser'])?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right:5),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.yellow,fontSize: 20),),),
