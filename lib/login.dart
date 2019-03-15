@@ -20,7 +20,6 @@ class _LoginPage extends State<LoginPage> {
   final loginData credentials=new loginData();
   final FirebaseAuth auth=FirebaseAuth.instance;
 
-
   Future<void> signIn() async{
     final formState=_formKey.currentState;
     if(formState.validate()){
@@ -48,7 +47,6 @@ class _LoginPage extends State<LoginPage> {
         child: Padding(padding: EdgeInsets.symmetric(horizontal: 100),
           child: Column(
             children: <Widget>[
-
               Padding(padding: EdgeInsets.symmetric(vertical: 20),
               child:TextFormField(
                 style: TextStyle(color: Colors.white),
@@ -63,6 +61,8 @@ class _LoginPage extends State<LoginPage> {
                 validator: (val)=>val==''?val:null,
               ),
       ),
+              Row(children: <Widget> [
+              Flexible(child:
               Padding(padding: EdgeInsets.symmetric(vertical: 20),
                 child:
               TextFormField(
@@ -73,10 +73,15 @@ class _LoginPage extends State<LoginPage> {
                   hintStyle: TextStyle(color: Colors.white),
                   // labelText: "password",
                 ),
+                obscureText: true,
                 onSaved: (val)=>credentials.password=val,
                 validator: (val)=>val==''?val:null,
               ),
               ),
+              ),
+
+              ],),
+
             ],
           ),
         ),

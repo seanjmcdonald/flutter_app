@@ -21,6 +21,8 @@ class _CreateAccountPage extends State<CreateAccountPage> {
   UserData userData;
   static final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
+  bool showPassword=false;
+  bool confirmPassword=false;
 
   void _submit(){
     //print(_email);
@@ -94,14 +96,13 @@ class _CreateAccountPage extends State<CreateAccountPage> {
                   labelText: 'Email',
                   labelStyle: TextStyle(color: Colors.white,),
                 ),
-
+                  style: TextStyle(color: Colors.white),
                   onSaved: (val)=>email=val,
                   validator: (val)=>val==''?'Email can\'t be empty':null,
                 ),
                 ),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
+Row(children: <Widget> [
+                Flexible(
                   child:
                 TextFormField(decoration: InputDecoration(
                     labelText: 'Password',
@@ -110,22 +111,44 @@ class _CreateAccountPage extends State<CreateAccountPage> {
                         color: Colors.white
                     ),
                 ),
+                  style: TextStyle(color: Colors.white),
+                  obscureText: showPassword,
                   onSaved: (val)=>password=val,
                   validator: (val)=>val==''?'Password can\'t be empty':null,
                 ),
     ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child:
-                TextFormField(decoration: InputDecoration(
+                IconButton(icon: Icon(Icons.remove_red_eye,color: Colors.white,),onPressed: (){
+                  setState(() {
+                    showPassword=!showPassword;
+                  });
+                },)
+                ],
+),
+                Row(
+                 children: <Widget> [
+                  Flexible(child:
+                  TextFormField(decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white),),
                     labelText: 'Confirm Password',
                     labelStyle: TextStyle(
                         color: Colors.white
                     ),
-                ),
+                  ),
+                  style: TextStyle(color: Colors.white),
+                  obscureText: confirmPassword,
                   validator: (val)=>val=='' && val!=password?'Passwords must match':null,
-                ),
+                  ),
+                  ),
+                   IconButton(icon: Icon(Icons.remove_red_eye,color: Colors.white,),onPressed: (){
+                     setState(() {
+                       confirmPassword=!confirmPassword;
+                     });
+                   },)
+                  ],
+                  
+
+
+
     ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
@@ -146,34 +169,6 @@ class _CreateAccountPage extends State<CreateAccountPage> {
           ),
         ],
       ),
-
-
-
-      /*Container(
-
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              TextFormField(decoration: InputDecoration(labelText: 'email'),
-                onSaved: (val)=>email=val,
-                validator: (val)=>val==''?'email can\'t be empty':null,
-              ),
-              TextFormField(decoration: InputDecoration(labelText: 'password'),
-                onSaved: (val)=>password=val,
-                validator: (val)=>val==''?'major can\'t be empty':null,
-              ),
-              TextFormField(decoration: InputDecoration(labelText: 'confirm password'),
-                validator: (val)=>val=='' && val!=password?'year can\'t be empty':null,
-              ),
-              RaisedButton(child: Text('Create account'),onPressed: _submit),
-            ],
-          ),
-        ),
-      ),
-
-      */
     );
   }
 }
