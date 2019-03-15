@@ -22,6 +22,7 @@ class _Profile extends State<Profile> {
   bool changeyear=false;
   final GlobalKey<FormState>_formKey= new GlobalKey<FormState>();
   String newMajor,newName,newYear,selectedyear;
+  List<bool> toggleEdit=[false,false,false];
  //changefield=false;
   //changename=false;
 
@@ -222,6 +223,8 @@ class _Profile extends State<Profile> {
                     ),
                     onPressed: () {
                       setState(() {
+                        changemajor=false;
+                        changeyear=false;
                        changename=!changename;
                       });
                       print('going for it');
@@ -240,12 +243,14 @@ class _Profile extends State<Profile> {
                       FlatButton(
                         onPressed: (){
                           setState(() {
+                            changename=false;
+                            changemajor=false;
                             changeyear=!changeyear;
                           });
                         },
                         child: changeyear==false?Text('EDIT',style: TextStyle(color: Colors.white),):DropdownButton(
                           //value: selectedYear,
-                          hint: selectedyear==null?Text('Select your year'):Text(selectedyear,style: TextStyle(color: Colors.white),),
+                          hint: selectedyear==null?Text('Select your year',style: TextStyle(color: Colors.white),):Text(selectedyear,style: TextStyle(color: Colors.white),),
                           items: selectYear,
                           onChanged: (value) {
                             setState(() {
@@ -255,7 +260,8 @@ class _Profile extends State<Profile> {
                         ),
                       ),
                       changeyear?RaisedButton(
-                        child: Text("Submit",style: TextStyle(color: Colors.orange),),
+                        child: Text("Submit",style: TextStyle(color: Colors.white),),
+                        color: Colors.orange,
                         onPressed: () {
                           alterUserData('year',selectedyear);
                           setState(() {
@@ -305,6 +311,8 @@ class _Profile extends State<Profile> {
                     onPressed: () {
                       setState(() {
                         changemajor=!changemajor;
+                        changename=false;
+                        changeyear=false;
                       });
                       print('going for it');
                     },

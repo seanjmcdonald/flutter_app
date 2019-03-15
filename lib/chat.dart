@@ -277,9 +277,10 @@ class _TwoPersonChat extends State<TwoPersonChat> {
 
 
   Widget buildList(index,data){
-    bool fromUser=(user.email==data['fromUser']);
+    bool fromUser=(user.email!=data['fromUser']);
     return Row(
       children: <Widget>[
+        fromUser?Container(child: Image.network(data['imgurl'].toString()),):Container(),
         Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.all(5),
@@ -302,6 +303,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
     return Scaffold(
 
       appBar: AppBar(
+
         centerTitle: true,
         title: Text('${widget.object.toUser}',style: TextStyle(color: Colors.teal),),
         backgroundColor: Colors.white,
