@@ -53,8 +53,10 @@ class _LoginPage extends State<LoginPage> {
               child:TextFormField(
                 style: TextStyle(color: Colors.white),
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration.collapsed(
-                  hintText: "your email",
+                decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                  hintText: "Email",
+                  hintStyle: TextStyle(color: Colors.white),
                   // labelText: "email address",
                 ),
                 onSaved: (val)=>credentials.email=val,
@@ -65,8 +67,10 @@ class _LoginPage extends State<LoginPage> {
                 child:
               TextFormField(
                 style: TextStyle(color: Colors.white),
-                decoration: InputDecoration.collapsed(
-                  hintText: "your password",
+                decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                  hintText: "Password",
+                  hintStyle: TextStyle(color: Colors.white),
                   // labelText: "password",
                 ),
                 onSaved: (val)=>credentials.password=val,
@@ -150,56 +154,6 @@ class _LoginPage extends State<LoginPage> {
           ),
         ],
       ),
-
-      /*
-      new Container(
-        width: screenSize.width,
-        padding: EdgeInsets.all(20.0),
-        //width: screenSize.width,
-        child: new Form(
-          key: this._formKey,
-            child: new ListView(
-              children: <Widget>[
-                new TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    hintText: "your email",
-                    labelText: "email address",
-                  ),
-                  onSaved: (val)=>credentials.email=val,
-                  validator: (val)=>val==''?val:null,
-                ),
-                new TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "your password",
-                    labelText: "password",
-                  ),
-                  onSaved: (val)=>credentials.password=val,
-                  validator: (val)=>val==''?val:null,
-                ),
-                new Container(
-                  width: MediaQuery.of(context).size.width/2,
-                  child: new RaisedButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                    child: Text('Sign In'),
-                    color: Colors.teal,
-                    onPressed: signIn,
-                  ),
-                ),
-                new Container(
-                  width: MediaQuery.of(context).size.width*2/3,
-                  child: new RaisedButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                    color: Colors.teal,
-                    child: Text('Create an account'),
-                    onPressed: () => Navigator.pushNamed(context, '/createaccount'),
-                  ),
-                ),
-              ],
-            ),
-        ),
-      ),
-      */
     );
   }
 }

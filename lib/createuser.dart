@@ -71,8 +71,39 @@ class _CreateAccountPage extends State<CreateAccountPage> {
   Widget build(BuildContext context) {
     // final Size screenSize=MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text('Create an account'),),
-      body: Container(
+      backgroundColor: Colors.teal,
+      appBar: AppBar(title: Text('Create an account'),
+      backgroundColor: Colors.teal,),
+      body: Stack(
+        children: <Widget>[
+          Form(
+          key: _formKey,
+            child: Column(
+    //          mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextFormField(decoration: InputDecoration(labelText: 'email',labelStyle: TextStyle(color: Colors.white),),
+
+                  onSaved: (val)=>email=val,
+                  validator: (val)=>val==''?'email can\'t be empty':null,
+                ),
+                TextFormField(decoration: InputDecoration(labelText: 'password'),
+                  onSaved: (val)=>password=val,
+                  validator: (val)=>val==''?'major can\'t be empty':null,
+                ),
+                TextFormField(decoration: InputDecoration(labelText: 'confirm password'),
+                  validator: (val)=>val=='' && val!=password?'year can\'t be empty':null,
+                ),
+                RaisedButton(child: Text('Create account'),onPressed: _submit),
+              ],
+            ),
+          ),
+        ],
+      ),
+
+
+
+      /*Container(
+
         padding: EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
@@ -94,6 +125,8 @@ class _CreateAccountPage extends State<CreateAccountPage> {
           ),
         ),
       ),
+
+      */
     );
   }
 }
