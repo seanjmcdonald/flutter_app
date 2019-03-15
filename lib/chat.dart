@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:async/async.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
@@ -143,7 +142,6 @@ class TwoPersonChat extends StatefulWidget{
 class _TwoPersonChat extends State<TwoPersonChat> {
   TextEditingController textController= TextEditingController();
   FirebaseUser user;
-  FocusNode _focusNode=FocusNode();
 
 
   void sendMessage(data) {

@@ -42,37 +42,88 @@ class _LoginPage extends State<LoginPage> {
   }
 
   Widget loadText(){
-
     return Container(
-      padding: EdgeInsets.all(50),
       child:Form(
-      key: this._formKey,
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            style: TextStyle(color: Colors.white),
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration.collapsed(
-              hintText: "your email",
-             // labelText: "email address",
-            ),
-            onSaved: (val)=>credentials.email=val,
-            validator: (val)=>val==''?val:null,
-          ),
-          TextFormField(
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration.collapsed(
-              hintText: "your password",
-             // labelText: "password",
-            ),
-            onSaved: (val)=>credentials.password=val,
-            validator: (val)=>val==''?val:null,
-          ),
-        ],
+        key: this._formKey,
+        child: Padding(padding: EdgeInsets.symmetric(horizontal: 100),
+          child: Column(
+            children: <Widget>[
+
+              Padding(padding: EdgeInsets.symmetric(vertical: 20),
+              child:TextFormField(
+                style: TextStyle(color: Colors.white),
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration.collapsed(
+                  hintText: "your email",
+                  // labelText: "email address",
+                ),
+                onSaved: (val)=>credentials.email=val,
+                validator: (val)=>val==''?val:null,
+              ),
       ),
-    ),
+              Padding(padding: EdgeInsets.symmetric(vertical: 20),
+                child:
+              TextFormField(
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration.collapsed(
+                  hintText: "your password",
+                  // labelText: "password",
+                ),
+                onSaved: (val)=>credentials.password=val,
+                validator: (val)=>val==''?val:null,
+              ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
+
+  Widget loadButtons(){
+    return Container(
+      child: Column(
+        children: <Widget>[
+      Padding(
+      padding: EdgeInsets.symmetric(vertical: 40),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                border: Border.all(color: Colors.white,width: 1)
+            ),
+            width: MediaQuery.of(context).size.width/2,
+            height: 50,
+
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40),),
+              child: Text('Sign In',style: TextStyle(color: Colors.white),),
+              color: Colors.teal,
+              onPressed: signIn,
+            ),
+            ),
+          ),
+          Padding(padding: EdgeInsets.symmetric(vertical: 0),
+          child:
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              border: Border.all(color: Colors.white,width: 1),
+            ),
+            width: MediaQuery.of(context).size.width/2,
+            height: 50,
+            child: new RaisedButton(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+              color: Colors.teal,
+              child: Text('Create an account',style: TextStyle(color: Colors.white),),
+              onPressed: () => Navigator.pushNamed(context, '/createaccount'),
+            ),
+          ),
+    ),
+        ],
+      ),
+    );
+  }
+
 
 
   @override
@@ -90,37 +141,11 @@ class _LoginPage extends State<LoginPage> {
       body: Stack(
         children: <Widget>[
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               loadText(),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(color: Colors.white,width: 1)
-                ),
-                width: MediaQuery.of(context).size.width/2,
-                height: 50,
-                child: new RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40),),
-                  child: Text('Sign In',style: TextStyle(color: Colors.white),),
-                  color: Colors.teal,
-                  onPressed: signIn,
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  border: Border.all(color: Colors.white,width: 1),
-                ),
-                width: MediaQuery.of(context).size.width/2,
-                height: 50,
-                child: new RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                  color: Colors.teal,
-                  child: Text('Create an account',style: TextStyle(color: Colors.white),),
-                  onPressed: () => Navigator.pushNamed(context, '/createaccount'),
-                ),
-              ),
+              loadButtons(),
             ],
           ),
         ],
