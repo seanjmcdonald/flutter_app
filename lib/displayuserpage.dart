@@ -19,7 +19,11 @@ class _DisplayUserPage extends State<DisplayUserPage> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile of '+'${widget.userDocument['name']}'),),
+        iconTheme: IconThemeData(
+          color: Colors.teal
+        ),
+        backgroundColor: Colors.white,
+        title: Text('Profile of '+'${widget.userDocument['name']}',style: TextStyle(color: Colors.teal),),),
       body: ListView(
         children: <Widget>[
           Container(

@@ -121,7 +121,7 @@ class _Chat extends State<Chat> {
       builder: (context, snapshot){
         if(!snapshot.hasData) {
           return Center(
-            child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.green)),
+            child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.teal)),
           );
         } else {
           return Container(
@@ -217,7 +217,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
 
-        color: Colors.green,
+        color: Colors.teal,
         border: Border(top: BorderSide(color: Colors.blueGrey,width: 1))
       ),
       child: Row(
@@ -225,7 +225,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
           Material(
             child: Container(
               height: 50,
-              color: Colors.green,
+              color: Colors.red,
               child: IconButton(icon: Icon(Icons.image), onPressed: null),
             ),
           ),
@@ -244,7 +244,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
           ),
           Material(
             child: Container(
-              color: Colors.green,
+              color: Colors.red,
               child: IconButton(icon: Icon(Icons.send), onPressed: () =>sendMessage(textController.text)),
             ),
           ),
@@ -275,14 +275,18 @@ class _TwoPersonChat extends State<TwoPersonChat> {
     ),);
   }
 
+
   Widget buildList(index,data){
+    bool fromUser=(user.email==data['fromUser']);
     return Row(
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(8)),
-          child: (user.email==data['fromUser'])?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right:5),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.yellow,fontSize: 20),),),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),color:fromUser?Colors.teal:Colors.black),
+          child: (fromUser)
+              ?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style
+              :TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right:5),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.teal,fontSize: 20),),),
         ),
       ],
    //     padding: EdgeInsets.all(5),
@@ -296,7 +300,13 @@ class _TwoPersonChat extends State<TwoPersonChat> {
   Widget build(BuildContext context) {
     getUser();
     return Scaffold(
-      appBar: AppBar(title: Text('${widget.object.toUser}'),),
+
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('${widget.object.toUser}',style: TextStyle(color: Colors.teal),),
+        backgroundColor: Colors.white,
+        iconTheme:IconThemeData(color: Colors.teal),
+      ),
       body: Stack(
         children: <Widget>[
           Column(
