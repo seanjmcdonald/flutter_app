@@ -71,29 +71,76 @@ class _CreateAccountPage extends State<CreateAccountPage> {
   Widget build(BuildContext context) {
     // final Size screenSize=MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.teal,
-      appBar: AppBar(title: Text('Create an account'),
+      appBar: AppBar(title: Text('Create An Account'),
       backgroundColor: Colors.teal,),
       body: Stack(
         children: <Widget>[
           Form(
           key: _formKey,
             child: Column(
-    //          mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                TextFormField(decoration: InputDecoration(labelText: 'email',labelStyle: TextStyle(color: Colors.white),),
+                Padding(padding: EdgeInsets.symmetric(vertical: 40)),
+                Padding(
+
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child:
+                TextFormField(decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.white)
+                  ),
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.white,),
+                ),
 
                   onSaved: (val)=>email=val,
-                  validator: (val)=>val==''?'email can\'t be empty':null,
+                  validator: (val)=>val==''?'Email can\'t be empty':null,
                 ),
-                TextFormField(decoration: InputDecoration(labelText: 'password'),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child:
+                TextFormField(decoration: InputDecoration(
+                    labelText: 'Password',
+                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                    labelStyle: TextStyle(
+                        color: Colors.white
+                    ),
+                ),
                   onSaved: (val)=>password=val,
-                  validator: (val)=>val==''?'major can\'t be empty':null,
+                  validator: (val)=>val==''?'Password can\'t be empty':null,
                 ),
-                TextFormField(decoration: InputDecoration(labelText: 'confirm password'),
-                  validator: (val)=>val=='' && val!=password?'year can\'t be empty':null,
+    ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child:
+                TextFormField(decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white),),
+                    labelText: 'Confirm Password',
+                    labelStyle: TextStyle(
+                        color: Colors.white
+                    ),
                 ),
-                RaisedButton(child: Text('Create account'),onPressed: _submit),
+                  validator: (val)=>val=='' && val!=password?'Passwords must match':null,
+                ),
+    ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child:
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: Colors.white,
+                  ),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                  child: Text('Create Account'),onPressed: _submit,color: Colors.teal,
+                ),
+    ),
+    ),
               ],
             ),
           ),
