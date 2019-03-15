@@ -61,6 +61,7 @@ class _Chat extends State<Chat> {
   Widget buildItem(index, data){
     return ListTileTheme(
       child: Container(
+       // margin: EdgeInsets.fromLTRB(32,0,0,0),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: (){
@@ -89,13 +90,18 @@ class _Chat extends State<Chat> {
 
           },
           child: Row(
+           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
-                child: Image.network(data['imgurl'].toString(),width: 75, height: 150,),
+                //padding: EdgeInsets.only(left: 5),
+                child: Image.network(data['imgurl'].toString(),width: 100, height: 150,),
               ),
-              Container(
-                child: Text(data['name']),
+      Padding(padding: EdgeInsets.only(left: 50),
+        child:
+              Center(
+                child: Text(data['name'],style: TextStyle(color: Colors.white,fontSize: 20),),
               ),
+    ),
             ],
           ),
         ),
@@ -113,10 +119,17 @@ class _Chat extends State<Chat> {
             child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.green)),
           );
         } else {
-          return ListView.builder(
-            padding: EdgeInsets.all(23.0),
+          return Container(
+            color: Colors.teal,
+          child: ListView.separated(
+            separatorBuilder: (context,index)=> Divider(
+              height: 4,
+              color: Colors.white,
+            ),
+            padding: EdgeInsets.all(0),
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context,index) => buildItem(index,snapshot.data.documents[index]),
+          ),
           );
         }
       },
@@ -127,6 +140,7 @@ class _Chat extends State<Chat> {
   Widget build(BuildContext context) {
     getUser();
     return Scaffold(
+      appBar: AppBar(title: Text('Message Users',style: TextStyle(color: Colors.teal)),centerTitle: true,backgroundColor: Colors.white,),
         body: chat(),
     );
   }

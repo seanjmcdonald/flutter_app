@@ -56,7 +56,7 @@ class _HomeScreen extends State<HomeScreen> {
 //  Object oops=new Object();
 
   final List<Widget> renderedPages =[
-    CameraApp(),
+    //CameraApp(),
     Chat(),
     Profile(),
    // FilterUsers(),
@@ -104,25 +104,21 @@ class _HomeScreen extends State<HomeScreen> {
               canvasColor: Colors.green,
             ),
         child: BottomNavigationBar(
-          fixedColor: Colors.black,
+          fixedColor: Colors.white,
           currentIndex: currentPage,
           onTap: setCurrentPage,
           items: [
           BottomNavigationBarItem(
-            icon: new Icon(Icons.notifications),
-            title: Text('Notifications'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            title: Text('store'),
+            icon: Icon(Icons.message),
+            title: Text('Message'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            title: Text('place holder'),
+            title: Text('Profile'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            title: Text('filter'),
+            icon: Icon(Icons.search),
+            title: Text('Search'),
           ),
         ],
         ),
