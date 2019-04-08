@@ -23,8 +23,21 @@ class _Profile extends State<Profile> {
   final GlobalKey<FormState>_formKey= new GlobalKey<FormState>();
   String newMajor,newName,newYear,selectedyear;
   List<bool> toggleEdit=[false,false,false];
- //changefield=false;
-  //changename=false;
+
+
+  final year=SnackBar(content: Text('Pick a year before hitting submit.')
+    ,backgroundColor: Colors.pink,
+  );
+
+  final name=SnackBar(content: Text('Enter your name before hitting submit.')
+    ,backgroundColor: Colors.pink,
+  );
+
+  final major=SnackBar(content: Text('Enter your major before hitting submit.')
+    ,backgroundColor: Colors.pink,
+  );
+
+
 
   @override
   void initState(){
@@ -77,8 +90,8 @@ class _Profile extends State<Profile> {
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
       if(postSnapshot!=null && postSnapshot.exists) {
-
         setState(() {
+          print('ss');
           ss = postSnapshot;
         });
       } else {
@@ -135,11 +148,9 @@ class _Profile extends State<Profile> {
     //fix??
 
     getUserInfo();
-
     if(userData.uid!='default' && ss==null){
       getFromFirebase();
     }
-
     if(ss!=null&& userData.major=='default') {
       setLocal();
     }
@@ -159,7 +170,7 @@ class _Profile extends State<Profile> {
         ],
         title: Text('Edit Profile',style: TextStyle(color: Colors.teal),),
       ),
-      body:(ss==null)?Center(child: Column(children: <Widget>[Text('loading...',style: TextStyle(color: Colors.white),)],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),):Stack(
+      body:(ss==null)?Center(child: Column(children: <Widget>[Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),):Stack(
         children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height,
@@ -193,7 +204,7 @@ class _Profile extends State<Profile> {
                     style: TextStyle(color: Colors.white),
                   ),
                   FlatButton(
-                    child: changename==false?Text('EDIT',style: TextStyle(color: Colors.white)):SizedBox(
+                    child: changename==false?Text('EDIT',style: TextStyle(color: Colors.white),):SizedBox(
                       height: 100.0,
                       width: MediaQuery.of(context).size.width/3,
                       child: Form(
@@ -201,6 +212,7 @@ class _Profile extends State<Profile> {
                       child: Column(
                         children: <Widget>[
                           TextFormField(
+                            decoration: InputDecoration(focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.white))),
                             style: TextStyle(color: Colors.white),
                             validator: (val)=>val==''?val:null,
                             onSaved: (val)=> newName=val,
@@ -209,13 +221,17 @@ class _Profile extends State<Profile> {
                             color: Colors.orange,
                               child: Text('Submit',style: TextStyle(color: Colors.white),),
                               onPressed: () {
-                                saveForm();
-                                alterUserData('name',newName);
+                              saveForm();
+                              if(newName==null ||newName=='default') {
+                                Scaffold.of(context).showSnackBar(name);
+                              } else {
+                                print('newname is '+newName);
+                                alterUserData('name', newName);
                                 setState(() {
-                                  userData.name=newName;
-                                  changename=!changename;
+                                  userData.name = newName;
+                                  changename = !changename;
                                 });
-                              },
+                              }},
                           ),
                         ],
                       ),
@@ -265,10 +281,11 @@ class _Profile extends State<Profile> {
                         onPressed: () {
                           alterUserData('year',selectedyear);
                           setState(() {
-                            changeyear=false;
                             userData.year=selectedyear;
-                          });
-                        },):Container(),
+                            changeyear=false;
+
+                          });}
+                        ):Container(),
                     ],
                   )
 
@@ -289,6 +306,7 @@ class _Profile extends State<Profile> {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
+                              decoration: InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white))),
                               style: TextStyle(color: Colors.white),
                               validator: (val)=>val==''?val:null,
                               onSaved: (val)=> newMajor=val,
@@ -297,12 +315,13 @@ class _Profile extends State<Profile> {
                               color: Colors.orange,
                               child: Text('Submit',style: TextStyle(color: Colors.white),),
                               onPressed: () {
-                                saveForm();
-                                alterUserData('major',newMajor);
-                                setState(() {
-                                  userData.major=newMajor;
-                                });
-                              },
+
+                                  saveForm();
+                                  alterUserData('major', newMajor);
+                                  setState(() {
+                                    userData.major = newMajor;
+                                  });
+                                },
                             ),
                           ],
                         ),
@@ -412,7 +431,7 @@ class _EditProfile extends State<EditProfile> {
                   Text('Year'),
               DropdownButton(
                 //value: selectedYear,
-                hint: selectedYear==null?Text('Select your year'):Text(selectedYear),
+                hint: selectedYear==null?Text('Select your year'):Text(selectedYear,),
                   items: selectYear,
                   onChanged: (value) {
                     setState(() {

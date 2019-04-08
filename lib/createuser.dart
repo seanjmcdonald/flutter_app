@@ -21,8 +21,8 @@ class _CreateAccountPage extends State<CreateAccountPage> {
   UserData userData;
   static final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
-  bool showPassword=false;
-  bool confirmPassword=false;
+  bool showPassword=true;
+  bool confirmPassword=true;
 
   void _submit(){
     //print(_email);

@@ -218,7 +218,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
       decoration: BoxDecoration(
 
         color: Colors.teal,
-        border: Border(top: BorderSide(color: Colors.blueGrey,width: 1))
+        border: Border(top: BorderSide(color: Colors.teal,width: 1))
       ),
       child: Row(
         children: <Widget>[

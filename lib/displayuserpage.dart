@@ -18,6 +18,7 @@ class _DisplayUserPage extends State<DisplayUserPage> {
       ss='${widget.userDocument}';
     });
     return Scaffold(
+      backgroundColor: Colors.teal,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.teal
@@ -33,25 +34,25 @@ class _DisplayUserPage extends State<DisplayUserPage> {
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['name']}',style: TextStyle(fontSize: 40),),
+            child: Text('${widget.userDocument['name']}',style: TextStyle(fontSize: 40,color: Colors.white),),
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['major']}',style: TextStyle(fontSize: 30),),
+            child: Text('${widget.userDocument['major']}',style: TextStyle(fontSize: 30,color: Colors.white),),
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['year']}',style: TextStyle(fontSize: 20),),
+            child: Text('${widget.userDocument['year']}',style: TextStyle(fontSize: 20,color: Colors.white),),
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('Classes Taken: CINS-465 , CSCI-430',style: TextStyle(fontSize: 20),),
+            child: Text('Classes Taking: ',style: TextStyle(fontSize: 20,color: Colors.white),),
           ),
           Container(
             height: MediaQuery.of(context).size.height/5,
             child:
           SingleChildScrollView(
-            child: Text('${widget.userDocument['bio']}'),
+            child: Text('${widget.userDocument['classes']}'.replaceAll('[', '').replaceAll(']',''),style: TextStyle(color: Colors.white),),
           ),
           ),
           //Image.network(ss['imgurl']);

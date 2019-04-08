@@ -23,7 +23,11 @@ class _CreateQuery extends State<CreateQuery> {
   List<DropdownMenuItem<String>> selectMajor = [];
   String selectedYear='';
   String selectedMajor='';
+  String selectedClass='';
   bool showSearch=false;
+  TextEditingController searchClass;
+  final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
+
 
   UserData userData = new UserData();
   FirebaseUser user;
@@ -46,34 +50,37 @@ class _CreateQuery extends State<CreateQuery> {
   }
 
   getData() async{
-    return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
+    // return await Firestore.instance.collection('user').where('major', isEqualTo:'murderer').getDocuments();
+    return await Firestore.instance.collection('user').getDocuments();
   }
 
-  filterUsers(selectedYear,selectedMajor){
-    getFilteredData(selectedYear, selectedMajor).then((snapshot){
+  filterUsers(selectedMajor,selectedClass){
+    print(selectedClass);
+
+    getFilteredData( selectedMajor,selectedClass.toString().toUpperCase()).then((snapshot){
       setState(() {
         ss=snapshot;
       });
     });
   }
-
-  getFilteredData(selectedYear,selectedMajor) async{
-    if(selectedMajor!='' && selectedYear!=''){
-      return await Firestore.instance.collection('user').where('year', isEqualTo:selectedYear).where('major',isEqualTo: selectedMajor).getDocuments();
-
+  getFilteredData(selectedMajor,selectedClass) async{
+    if(selectedClass!='' && selectedMajor!=''){
+      return await Firestore.instance.collection('user')
+          .where('class', isEqualTo: selectedClass)
+          .where('major', isEqualTo: selectedMajor).getDocuments();
     }
-    if(selectedYear!='') {
-      return await Firestore.instance.collection('user').where('year', isEqualTo: selectedYear).getDocuments();
+
+    if(selectedClass!=''){
+      print(selectedClass);
+      return await Firestore.instance.collection('user')
+          .where('classes',arrayContains: selectedClass.toUpperCase()).getDocuments();
     }
+
     if(selectedMajor!='') {
-      return await Firestore.instance.collection('user').where('major', isEqualTo: selectedMajor).getDocuments();
+      return await Firestore.instance.collection('user').
+      where('major', isEqualTo: selectedMajor).getDocuments();
     }
-
-    else {
-      return await Firestore.instance.collection('user').getDocuments();
-
-    }
-
+    return await Firestore.instance.collection('user').getDocuments();
   }
 
   //getFilteredData(category,value) async{
@@ -171,7 +178,7 @@ class _CreateQuery extends State<CreateQuery> {
               children: <Widget>[
                 Container(
                   width: 100.0,
-                  height: 150.0,
+                  height: 120.0,
                   child: Image.network(ss.documents[i].data['imgurl'].toString(),height: 250, width: 100.0,),),
                 Container(
                   width: MediaQuery.of(context).size.width-100,
@@ -192,6 +199,7 @@ class _CreateQuery extends State<CreateQuery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.teal,
       appBar: AppBar(
         actions: <Widget>[
@@ -201,7 +209,9 @@ class _CreateQuery extends State<CreateQuery> {
         
         ),
       backgroundColor: Colors.white,),
-      body: ListView(
+      body: Form(
+        key: _formKey,
+        child: ListView(
          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Row(
@@ -218,41 +228,65 @@ class _CreateQuery extends State<CreateQuery> {
 
               ],
             ),
-            Row(
-              children: <Widget>[
-                DropdownButton(
-                  items: selectYear,
-                  hint: selectedYear==''?Text('search for a year',style: TextStyle(color: Colors.white),):Text(selectedYear,style: TextStyle(color: Colors.white),),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedYear=value;
-                    });
-                  },
-                ),
 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Search For a Course',style: TextStyle(color: Colors.white),),
+                Container(
+                  alignment: Alignment.centerRight,
+                  width: MediaQuery.of(context).size.width/2*1.2,
+                  child: TextFormField(
+                    controller: searchClass,
+                    validator: (val){
+                      if(val!=null)
+                        print("not null");
+                    },
+                    onSaved: (val) {
+                      setState(() {
+                        print('here val is '+val);
+                        selectedClass=val;
+                      });
+                    },
+                    decoration: InputDecoration(focusedBorder: UnderlineInputBorder(borderSide:BorderSide(color: Colors.white))),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ],
             ),
-            RaisedButton(
 
+            RaisedButton(
               color: Colors.white,
                 child: Text('Search',style: TextStyle(color: Colors.teal),),
                 onPressed: () {
-                  filterUsers(selectedYear, selectedMajor);
-                  print('the year is '+selectedMajor);
-                  setState(() {
+                  //print('the year is '+ searchClass.text);
+                 // filterUsers(selectedMajor,selectedClass);
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                     filterUsers(selectedMajor,selectedClass);
+
+                  }
+                 // setState(() {
+                   // print(searchClass.text);
+
+               //     if(_formKey.currentState.validate()) {
+                 //     print('valid');
+                   //   _formKey.currentState.save();
+                    //}
                     showSearch=!showSearch;
-                  });
+                 // });
                 }
             ),
             Container(
               alignment: Alignment.topCenter,
-              child:search(selectedYear),
+              child:search(selectedClass),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height/1.85,
 //              height: MediaQuery.of(context).size.height-36-2*24-24-,
             )
           ],
         ),
+    ),
     );
   }
 }
