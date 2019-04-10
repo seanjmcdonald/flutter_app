@@ -33,26 +33,31 @@ class _DisplayUserPage extends State<DisplayUserPage> {
             child: Image.network('${widget.userDocument['imgurl']}'.toString()),
           ),
           Container(
+            color: Colors.white,
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['name']}',style: TextStyle(fontSize: 40,color: Colors.white),),
+            child: Text('${widget.userDocument['name']}',style: TextStyle(fontSize: 40,color: Colors.teal),),
           ),
           Container(
+            color: Colors.white,
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['major']}',style: TextStyle(fontSize: 30,color: Colors.white),),
+            child: Text('${widget.userDocument['major']}',style: TextStyle(fontSize: 30,color: Colors.teal),),
           ),
           Container(
+            color: Colors.white,
             alignment: Alignment.center,
-            child: Text('${widget.userDocument['year']}',style: TextStyle(fontSize: 20,color: Colors.white),),
+            child: Text('${widget.userDocument['year']}',style: TextStyle(fontSize: 20,color: Colors.teal),),
           ),
           Container(
+            color: Colors.white,
             alignment: Alignment.center,
-            child: Text('Classes Taking: ',style: TextStyle(fontSize: 20,color: Colors.white),),
+            child: Text('Classes Taking: ',style: TextStyle(fontSize: 20,color: Colors.teal),),
           ),
           Container(
             height: MediaQuery.of(context).size.height/5,
             child:
-          SingleChildScrollView(
-            child: Text('${widget.userDocument['classes']}'.replaceAll('[', '').replaceAll(']',''),style: TextStyle(color: Colors.white),),
+          Container(
+            alignment: Alignment.center,
+            child: Text('${widget.userDocument['classes']}'.replaceAll('[', '').replaceAll(']',''),style: TextStyle(color: Colors.white,fontSize: 25),),
           ),
           ),
           //Image.network(ss['imgurl']);
