@@ -43,6 +43,9 @@ class _DisplayUserPage extends State<DisplayUserPage> with SingleTickerProviderS
           test('12 pm',4),
           test('1 pm',5),
           test('2 pm',6),
+          test('3 pm',7),
+          test('4 pm',8),
+
         ],
       )
     );
@@ -59,45 +62,65 @@ Widget test(String hour,int i){
         width: MediaQuery.of(context).size.width/8,
         child: RaisedButton(onPressed: (){
           setState(() {
-            toggleCalender[i*6]=!toggleCalender[i*6];
+            toggleCalender[i*7]=!toggleCalender[i*7];
           });
-        },color: toggleCalender[i*6]?Colors.red:Colors.blue,),
+        },color: toggleCalender[i*7]?Colors.red:Colors.blue,),
       ),
       SizedBox(
         width: MediaQuery.of(context).size.width/8,
         child: RaisedButton(onPressed: (){
           setState(() {
-            toggleCalender[i*6+1]=!toggleCalender[i*6+1];
+            toggleCalender[i*7+1]=!toggleCalender[i*7+1];
           });
-        },color: toggleCalender[i*6+1]?Colors.red:Colors.blue,),
+        },color: toggleCalender[i*7+1]?Colors.red:Colors.blue,),
       ),
       SizedBox(
         width: MediaQuery.of(context).size.width/8,
         child: RaisedButton(onPressed: (){
           setState(() {
-            toggleCalender[i*6+2]=!toggleCalender[i*6+2];
+            toggleCalender[i*7+2]=!toggleCalender[i*7+2];
           });
-        },color: toggleCalender[i*6+2]?Colors.red:Colors.blue,),
+        },color: toggleCalender[i*7+2]?Colors.red:Colors.blue,),
       ),
       SizedBox(
         width: MediaQuery.of(context).size.width/8,
-        child: RaisedButton(onPressed: null),
+        child: RaisedButton(onPressed: (){
+          setState(() {
+            toggleCalender[i*7+3]=!toggleCalender[i*7+3];
+          });
+        },color: toggleCalender[i*7+3]?Colors.red:Colors.blue,),
       ),
       SizedBox(
         width: MediaQuery.of(context).size.width/8,
-        child: RaisedButton(onPressed: null),
+        child: RaisedButton(onPressed: (){
+          setState(() {
+            toggleCalender[i*7+4]=!toggleCalender[i*7+4];
+          });
+        },color: toggleCalender[i*7+4]?Colors.red:Colors.blue,),
       ),
       SizedBox(
         width: MediaQuery.of(context).size.width/8,
-        child: RaisedButton(onPressed: null),
+        child: RaisedButton(onPressed: (){
+          setState(() {
+            toggleCalender[i*7+5]=!toggleCalender[i*7+5];
+          });
+        },color: toggleCalender[i*7+5]?Colors.red:Colors.blue,),
       ),
-
+      SizedBox(
+        width: MediaQuery.of(context).size.width/8,
+        child: RaisedButton(onPressed: (){
+          setState(() {
+            toggleCalender[i*7+6]=!toggleCalender[i*7+6];
+          });
+        },color: toggleCalender[i*7+6]?Colors.red:Colors.blue,),
+      ),
     ],
   );
 }
 
   Widget daysOfWeek(){
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         SizedBox(
           width: MediaQuery.of(context).size.width/8,
@@ -137,40 +160,6 @@ Widget test(String hour,int i){
       ],
     );
   }
-
-
-Widget availRow(){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-      ],
-    );
-}
-
-
-
-Widget calRow(){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Container(
-          child: Text('   '),
-        ),
-        Container(child:
-        Text('Mon'),
-          color: Colors.pink,
-        ),
-        Container(child:
-        Text('Tue'),
-        ),
-        Text('Wed'),
-        Text('Th'),
-        Text('Fri'),
-        Text('Sat'),
-        Text('Sun'),
-      ],
-    );
-}
 
   void setCurrentPage(index){
     setState(() {
