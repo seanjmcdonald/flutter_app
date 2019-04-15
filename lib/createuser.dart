@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'userobject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'homescreen.dart';
+import 'onboarding.dart';
 
 class CreateAccountWithEmail{
   Future<FirebaseUser> createSignIn(email,password){
@@ -52,7 +53,7 @@ class _CreateAccountPage extends State<CreateAccountPage> {
     if(auth!=null && _user!=null){
       //setInitUser();
       print('not null');
-      Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> HomeScreen()));
+      Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> Onboarding()));
 
     }
     /*

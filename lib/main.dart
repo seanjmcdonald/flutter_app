@@ -6,7 +6,7 @@ import 'displayusers.dart';
 import 'chat.dart';
 import 'createuser.dart';
 import 'camera.dart';
-
+import 'onboarding.dart';
 
 
 void main() {
@@ -31,6 +31,7 @@ class SeniorProject extends StatelessWidget{
         '/EditProfile':(context)=> new EditProfile(),
         '/createaccount':(context)=> new CreateAccountPage(),
         '/camera':(context)=> new CameraApp(),
+        '/onboarding':(context)=> Onboarding(),
 
       },
     );

@@ -7,6 +7,7 @@ class UserData{
   String uid='default';
   String imgurl='default';
 
+
   toJson () {
     return {
       "name":name,

@@ -66,7 +66,6 @@ class _Chat extends State<Chat> {
   Widget buildItem(index, data){
     return ListTileTheme(
       child: Container(
-       // margin: EdgeInsets.fromLTRB(32,0,0,0),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: (){

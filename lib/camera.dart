@@ -31,7 +31,7 @@ class _CameraApp extends State<CameraApp> {
   changeProfilePicture() {
       //check logged in
     Firestore.instance.collection('user').document(user.uid).updateData({"imgurl":location}).catchError((e){
-      print(e+ 'error in changeprofilepicture');
+      print(e.toString()+ 'error in changeprofilepicture');
     });
     //  Firestore.instance.collection('user').document(userData.uid).setData(userData.toJson()).catchError((e) {
       //print(e);
@@ -42,6 +42,7 @@ class _CameraApp extends State<CameraApp> {
     if(user!=null) {
       final StorageReference ref = FirebaseStorage.instance.ref().child(user.uid);
       final StorageUploadTask task = ref.putFile(image);
+
       String downurl = (await (await task.onComplete).ref.getDownloadURL()).toString();
       if(downurl!=null) {
         setState(() {
@@ -105,7 +106,7 @@ class _CameraApp extends State<CameraApp> {
   @override
   Widget build(context){
     return Scaffold(
-      appBar: AppBar(title: Text('camera')),
+     // appBar: AppBar(title: Text('camera')),
       body: ListView(
         children: <Widget>[
           SizedBox(
@@ -124,10 +125,12 @@ class _CameraApp extends State<CameraApp> {
                 ],
               ),
               SizedBox(child: image!=null?RaisedButton(child: Text('upload photo'),onPressed: () {
-                uploadImage();location==null?print('waiting'):Container(child:Text('the future is '+location.toString()));
+                uploadImage();
+                location==null?Text('waiting'):Container(child:Text('the future is '+location.toString()));
               }
               ):Text(''),),
-              SizedBox(height: 40.0,width: 110.0,
+
+             /* SizedBox(height: 40.0,width: 110.0,
                 child: RaisedButton(child:
                 Text('back to profile'),
                   onPressed:() {
@@ -137,6 +140,7 @@ class _CameraApp extends State<CameraApp> {
                    // Navigator.pushNamed(context,'/Profile'),
                   color: Colors.red,
               ),),
+              */
               //image!=null?RaisedButton(onPressed: null):
           ],
           ),
