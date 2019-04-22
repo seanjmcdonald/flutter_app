@@ -47,12 +47,17 @@ class Data{
 class _Onboarding extends State<Onboarding> {
   List<DropdownMenuItem<String>> selectYear = [];
   List<DropdownMenuItem<String>> selectMajor = [];
+  final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
+
   String selectedYear='';
   Data data;
   int currentPage;
   String name,major;
   TextEditingController getname= TextEditingController();
+  TextEditingController getclass= TextEditingController();
+
   TextEditingController getmajor= TextEditingController();
+  List<String> classes=[];
 
   @override
   void initState(){
@@ -194,6 +199,67 @@ class _Onboarding extends State<Onboarding> {
       ],
     );
   }
+  
+  addClass(){
+//    final formState=_formKey.currentState;
+  String classToAdd=getclass.text.toUpperCase();
+    RegExp search=RegExp(r'[A-Z]{4}-{0,1}[0-9]{3}[A-Z]{0,1}');
+    if(true==search.hasMatch(classToAdd)) {
+      print('here');
+      if(!classToAdd.contains('-')){
+        print('here');
+        classToAdd=classToAdd.substring(0,3)+'-'+classToAdd.substring(4,classToAdd.length);
+        print(classToAdd);
+      }
+      classes.add(classToAdd);
+      setState(() {
+        getclass.clear();
+      });
+    } else {
+
+    }
+  }
+
+  Widget getClasses(){
+    return  Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Expanded(
+          child:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text('what classes are you taking?'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               // crossAxisAlignment: CrossAxisAlignment.,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width/2,
+                    child: TextField(
+                      key: _formKey,
+                      controller: getclass,
+
+                    ),
+                  ),
+                  RaisedButton(
+                    child: Text('Add Class'),
+                    color: Colors.teal,
+                    onPressed: addClass,
+                  ),
+                ],
+              ),
+
+              Container(
+                child: Text(classes.toString()),
+              ),
+              RaisedButton(child: Text('Submit'),onPressed: null),
+            ],
+          ),),
+      ],
+    );
+  }
 
 
 
@@ -201,7 +267,7 @@ class _Onboarding extends State<Onboarding> {
   Widget build(BuildContext context) {
    return Scaffold(
      appBar: AppBar(title: Text('Create an Account'),),
-     body: CameraApp(),
+     body: getClasses(),
    );
   }
 }

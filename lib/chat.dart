@@ -91,13 +91,10 @@ class _Chat extends State<Chat> {
               print('errer');
             }
             Navigator.push(context, MaterialPageRoute(builder: (context) => TwoPersonChat(object: users)));
-
           },
           child: Row(
-           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Container(
-                //padding: EdgeInsets.only(left: 5),
                 child: Image.network(data['imgurl'].toString(),width: 100, height: 150,),
               ),
       Padding(padding: EdgeInsets.only(left: 50),
@@ -160,6 +157,7 @@ class _Chat extends State<Chat> {
     );
   }
 }
+
 class TwoPersonChat extends StatefulWidget{
   MessageUsers object;
   TwoPersonChat({Key key, this.object}): super(key:key);
@@ -173,10 +171,8 @@ class _TwoPersonChat extends State<TwoPersonChat> {
 
 
   void sendMessage(data) {
-
     if (data.trim()!='') {
       textController.clear();
-
       Firestore.instance.runTransaction((transaction) async {
         print('in message');
         var documentReference = Firestore.instance.collection('messages')
