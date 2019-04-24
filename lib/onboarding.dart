@@ -51,7 +51,7 @@ class _Onboarding extends State<Onboarding> {
   final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
 
   String selectedYear='';
-  Data data;
+  Data data=Data();
   int currentPage;
   String name,major;
   TextEditingController getname= TextEditingController();
@@ -66,6 +66,7 @@ class _Onboarding extends State<Onboarding> {
     loadYear();
   }
 
+
   void incrementPage(){
     print(currentPage);
 
@@ -73,6 +74,8 @@ class _Onboarding extends State<Onboarding> {
       ++currentPage;
     });
     print(currentPage);
+    print(data.toString());
+
   }
 
   loadYear(){
@@ -112,19 +115,23 @@ class _Onboarding extends State<Onboarding> {
         Column(
          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text('What is your name?'),
+            Text('What is your name?',style: TextStyle(color: Colors.white,fontSize: 30),),
             Container(
               width: MediaQuery.of(context).size.width/2,
               child: TextField(
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white))),
                 controller: getname,
                 onChanged: (_){
                   setState(() {
                     name=getname.text;
+                    data.name=name;
                   });
                 },
               ),
             ),
-            RaisedButton(child: Text('Submit'),onPressed: null),
+            RaisedButton(child: Text('Submit'),onPressed: incrementPage,color: Colors.white,),
           ],
         ),),
       ],
@@ -141,10 +148,13 @@ class _Onboarding extends State<Onboarding> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('What is your major?'),
+              Text('What is your major?',style: TextStyle(color: Colors.white,fontSize: 30)),
               Container(
                 width: MediaQuery.of(context).size.width/2,
                 child: TextField(
+                  style: TextStyle(color: Colors.white,fontSize: 25),
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white))),
                   controller: getmajor,
                   onChanged: (_){
                     setState(() {
@@ -153,19 +163,21 @@ class _Onboarding extends State<Onboarding> {
                   },
                 ),
               ),
-              Text('What is your year?'),
+              Text('What is your year?',style: TextStyle(color: Colors.white,fontSize: 30)),
                   DropdownButton(
                     items: selectYear,
-                    hint: selectedYear==''?Text('select your year',style: TextStyle(color: Colors.black),):Text(selectedYear,style: TextStyle(color: Colors.black),),
+                    hint: selectedYear==''?Text('select your year',style: TextStyle(color: Colors.white,fontSize: 25),):Text(selectedYear,style: TextStyle(color: Colors.white,fontSize: 25),),
                     onChanged: (value) {
                       setState(() {
                         selectedYear=value;
+                        data.major=major;
+                        data.year=selectedYear;
                       });
                     },
                   ),
 
 
-              (selectedYear!=''&&major!=null)?RaisedButton(child: Text('Submit'),onPressed: null):Container(),
+              (selectedYear!=''&&major!=null)?RaisedButton(child: Text('Submit',style: TextStyle(color: Colors.teal,)),onPressed: incrementPage):Container(),
             ],
           ),),
       ],
@@ -236,7 +248,7 @@ class _Onboarding extends State<Onboarding> {
           Column(
            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('what classes are you taking?'),
+              Text('what classes are you taking?',style: TextStyle(color: Colors.white,fontSize: 30)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                // crossAxisAlignment: CrossAxisAlignment.,
@@ -244,14 +256,17 @@ class _Onboarding extends State<Onboarding> {
                   Container(
                     width: MediaQuery.of(context).size.width/2,
                     child: TextField(
+                      cursorColor: Colors.white,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white))),
                       key: _formKey,
                       controller: getclass,
 
                     ),
                   ),
                   RaisedButton(
-                    child: Text('Add Class'),
-                    color: Colors.teal,
+                    child: Text('Add Class',style: TextStyle(color: Colors.teal,)),
+                    color: Colors.white,
                     onPressed: addClass,
                   ),
                 ],
@@ -259,7 +274,7 @@ class _Onboarding extends State<Onboarding> {
 
               Expanded(child:showWidgets()),
 
-              RaisedButton(child: Text('Submit'),onPressed: null),
+              RaisedButton(child: Text('Submit'),onPressed: incrementPage),
             ],
           ),),
       ],
@@ -276,7 +291,7 @@ class _Onboarding extends State<Onboarding> {
 
         });
       }
-      ,child:(Container(color:Colors.red,child:Text(classes[i],style: TextStyle(fontSize: 20),))))
+      ,child:(Container(color:Colors.white,child:Text(classes[i],style: TextStyle(fontSize: 20,color: Colors.teal),))))
 
       );
     }
@@ -307,8 +322,13 @@ class _Onboarding extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
    return Scaffold(
-     appBar: AppBar(title: Text('Create an Account'),),
-     body: getClasses(),
+     backgroundColor: Colors.teal,
+     appBar: AppBar(title: Text('Create an Account',style: TextStyle(color: Colors.teal),),backgroundColor: Colors.white,),
+     body:
+     currentPage==0?getUserName():
+     currentPage==1?getMajorYear():
+     currentPage==2?getClasses():
+     currentPage==3?getPicture():Container(child: Text('UH OH SOMETHING WENT WRONG'),),
    );
   }
 }
