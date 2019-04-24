@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'camera.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -203,7 +204,7 @@ class _Onboarding extends State<Onboarding> {
   addClass(){
 //    final formState=_formKey.currentState;
   String classToAdd=getclass.text.toUpperCase();
-    RegExp search=RegExp(r'[A-Z]{4}-{0,1}[0-9]{3}[A-Z]{0,1}');
+    RegExp search=RegExp(r'[A-Z]{4}-{0,1}[0-9]{3}[A-Z]{0,1}$');
     if(true==search.hasMatch(classToAdd)) {
       print('here');
       if(!classToAdd.contains('-')){
@@ -211,12 +212,17 @@ class _Onboarding extends State<Onboarding> {
         classToAdd=classToAdd.substring(0,3)+'-'+classToAdd.substring(4,classToAdd.length);
         print(classToAdd);
       }
-      classes.add(classToAdd);
       setState(() {
+        classes.add(classToAdd);
+
         getclass.clear();
       });
     } else {
-
+      Fluttertoast.showToast(msg: "A class should look like SMPL-111",
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.red,
+        textColor: Colors.white
+      );
     }
   }
 
@@ -228,11 +234,11 @@ class _Onboarding extends State<Onboarding> {
         Expanded(
           child:
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Text('what classes are you taking?'),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                // crossAxisAlignment: CrossAxisAlignment.,
                 children: <Widget>[
                   Container(
@@ -251,9 +257,8 @@ class _Onboarding extends State<Onboarding> {
                 ],
               ),
 
-              Container(
-                child: Text(classes.toString()),
-              ),
+              Expanded(child:showWidgets()),
+
               RaisedButton(child: Text('Submit'),onPressed: null),
             ],
           ),),
@@ -261,6 +266,42 @@ class _Onboarding extends State<Onboarding> {
     );
   }
 
+  Widget showWidgets(){
+    List<Widget> list=List<Widget>();
+    for(int i=0;i<classes.length;i++){
+      list.add(GestureDetector(onTap: () {
+
+        setState(() {
+          classes.removeAt(i);
+
+        });
+      }
+      ,child:(Container(color:Colors.red,child:Text(classes[i],style: TextStyle(fontSize: 20),))))
+
+      );
+    }
+    return Row(children: list, mainAxisAlignment: MainAxisAlignment.spaceEvenly,);
+  }
+
+  /*
+    Widget showWidgets(){
+    List<Widget> list=List<Widget>();
+    for(int i=0;i<classes.length;i++){
+      list.add(Container(child:GestureDetector(onTap: null,child: Dismissible(key: Key(classes[i]), child: Text(classes[i]),
+      onDismissed: (_){
+        print('here');
+        classes.removeAt(i);
+        }
+      ),
+      ),
+      ));
+    }
+    return Column(
+        children: list,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    );
+  }
+   */
 
 
   @override
