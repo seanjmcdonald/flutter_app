@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'camera.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Onboarding extends StatefulWidget {
   @override
   _Onboarding createState() => _Onboarding();
 }
+
 
 
 class Data{
@@ -49,6 +52,25 @@ class _Onboarding extends State<Onboarding> {
   List<DropdownMenuItem<String>> selectYear = [];
   List<DropdownMenuItem<String>> selectMajor = [];
   final GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
+  FirebaseUser user;
+
+  getUser() async {
+    FirebaseUser _user= await FirebaseAuth.instance.currentUser();
+    setState(() {
+      user=_user;
+    });
+    if(user!=null){
+      setState(() {
+        data.uid=_user.uid.toString();
+        data.email=user.email;
+        print("uid is = "+_user.uid.toString());
+      });
+    }
+  }
+
+  alterUserData() {
+    Firestore.instance.collection('user').document(data.uid).setData(data.toJson());
+  }
 
   String selectedYear='';
   Data data=Data();
@@ -62,6 +84,7 @@ class _Onboarding extends State<Onboarding> {
 
   @override
   void initState(){
+    getUser();
     currentPage=0;
     loadYear();
   }
@@ -74,9 +97,14 @@ class _Onboarding extends State<Onboarding> {
       ++currentPage;
     });
     print(currentPage);
-    print(data.toString());
+    print("name = "+ data.name);
+    alterUserData();
+    print(data.toJson());
 
   }
+
+
+
 
   loadYear(){
     selectYear.add(DropdownMenuItem(
@@ -194,7 +222,7 @@ class _Onboarding extends State<Onboarding> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('What is your name?'),
+
               Container(
                 width: MediaQuery.of(context).size.width/2,
                 child: TextField(
@@ -202,6 +230,7 @@ class _Onboarding extends State<Onboarding> {
                   onChanged: (_){
                     setState(() {
                       name=getname.text;
+                      getUser();
                     });
                   },
                 ),
@@ -216,12 +245,12 @@ class _Onboarding extends State<Onboarding> {
   addClass(){
 //    final formState=_formKey.currentState;
   String classToAdd=getclass.text.toUpperCase();
-    RegExp search=RegExp(r'[A-Z]{4}-{0,1}[0-9]{3}[A-Z]{0,1}$');
+    RegExp search=RegExp(r'[A-Z]{4}-?[0-9]{3}[A-Z]{0,1}$');
     if(true==search.hasMatch(classToAdd)) {
       print('here');
       if(!classToAdd.contains('-')){
         print('here');
-        classToAdd=classToAdd.substring(0,3)+'-'+classToAdd.substring(4,classToAdd.length);
+        classToAdd=classToAdd.substring(0,4)+'-'+classToAdd.substring(4,classToAdd.length);
         print(classToAdd);
       }
       setState(() {
@@ -230,10 +259,10 @@ class _Onboarding extends State<Onboarding> {
         getclass.clear();
       });
     } else {
-      Fluttertoast.showToast(msg: "A class should look like SMPL-111",
+      Fluttertoast.showToast(msg: "A class should look like Class-111",
       gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-        textColor: Colors.white
+      backgroundColor: Colors.black,
+        textColor: Colors.teal
       );
     }
   }
