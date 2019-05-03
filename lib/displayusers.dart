@@ -161,13 +161,20 @@ class _CreateQuery extends State<CreateQuery> {
     if(ss==null){
       return Center(child: Column(children: <Widget>[Text('loading...')],mainAxisAlignment: MainAxisAlignment.spaceEvenly,),);
     }
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context,index)=> Divider(
+        height: 4,
+        color: Colors.white,
+      ),
       itemCount: ss.documents.length,
       itemBuilder: (context,i){
         return ListTileTheme(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
+            color: Colors.teal,
+
+
+            //           color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
             child: GestureDetector(
               onTap: () {
                 print('tapped');

@@ -404,7 +404,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
       decoration: BoxDecoration(
 
           color: Colors.teal,
-          border: Border(top: BorderSide(color: Colors.teal,width: 1))
+          border: Border(top: BorderSide(color: Colors.white,width: 1))
       ),
       child: Row(
         children: <Widget>[
@@ -412,6 +412,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
             child: Container(
               height: 50,
               color: Colors.red,
+
               child: IconButton(icon: Icon(Icons.image), onPressed: null),
             ),
           ),

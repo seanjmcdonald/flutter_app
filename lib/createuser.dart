@@ -50,7 +50,9 @@ class _CreateAccountPage extends State<CreateAccountPage> {
     final newUser= await auth.createUserWithEmailAndPassword(email: email, password: pass);
     auth.signInWithEmailAndPassword(email: email, password: pass);
     FirebaseUser _user = await FirebaseAuth.instance.currentUser();
+
     if(auth!=null && _user!=null){
+      _user.sendEmailVerification();
       //setInitUser();
       print('not null');
       Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> Onboarding()));

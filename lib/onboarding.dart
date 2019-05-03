@@ -100,6 +100,9 @@ class _Onboarding extends State<Onboarding> {
     print("name = "+ data.name);
     alterUserData();
     print(data.toJson());
+    if(currentPage==2){
+      user.sendEmailVerification();
+    }
 
   }
 
