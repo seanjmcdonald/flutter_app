@@ -212,7 +212,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
 
-        color: Colors.teal,
+        color: Colors.white,
         border: Border(top: BorderSide(color: Colors.teal,width: 1))
       ),
       child: Row(
@@ -220,7 +220,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
           Material(
             child: Container(
               height: 50,
-              color: Colors.red,
+              color: Colors.white,
               child: IconButton(icon: Icon(Icons.image), onPressed: null),
             ),
           ),
@@ -239,7 +239,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
           ),
           Material(
             child: Container(
-              color: Colors.red,
+              color: Colors.white,
               child: IconButton(icon: Icon(Icons.send), onPressed: () =>sendMessage(textController.text)),
             ),
           ),
@@ -279,10 +279,10 @@ class _TwoPersonChat extends State<TwoPersonChat> {
         Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),color:fromUser?Colors.teal:Colors.black),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),color:fromUser?Colors.white:Colors.black),
           child: (fromUser)
               ?Container(padding: EdgeInsets.only(left: 15),child: Text(data['content'],textAlign: TextAlign.left,style
-              :TextStyle(color: Colors.white,fontSize: 20),),):Container(padding: EdgeInsets.only(right:5),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.teal,fontSize: 20),),),
+              :TextStyle(color: Colors.black,fontSize: 20),),):Container(padding: EdgeInsets.only(right:5),child: Text(data['content'],textAlign: TextAlign.right,style: TextStyle(color: Colors.teal,fontSize: 20),),),
         ),
       ],
    //     padding: EdgeInsets.all(5),
@@ -304,6 +304,7 @@ class _TwoPersonChat extends State<TwoPersonChat> {
         backgroundColor: Colors.white,
         iconTheme:IconThemeData(color: Colors.teal),
       ),
+      backgroundColor: Colors.teal,
       body: Stack(
         children: <Widget>[
           Column(

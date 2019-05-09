@@ -64,10 +64,11 @@ class _CreateQuery extends State<CreateQuery> {
     });
   }
   getFilteredData(selectedMajor,selectedClass) async{
+    print("selected Major is "+selectedMajor+'\nselected Class is '+selectedClass+'\n');
     if(selectedClass!='' && selectedMajor!=''){
       return await Firestore.instance.collection('user')
-          .where('class', isEqualTo: selectedClass)
-          .where('major', isEqualTo: selectedMajor).getDocuments();
+          .where('major', isEqualTo: selectedMajor)
+          .where('classes', arrayContains: selectedClass.toUpperCase()).getDocuments();
     }
 
     if(selectedClass!=''){
@@ -192,8 +193,7 @@ class _CreateQuery extends State<CreateQuery> {
                   alignment: Alignment.center,
                   child: Column(children: <Widget>[
                     Text(ss.documents[i].data['name'],textAlign: TextAlign.center,style: TextStyle(color: Colors.white,fontSize: 35),),
-                    Text(ss.documents[i].data['major'],textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontSize: 25),),
-                    Text(ss.documents[i].data['year'],textAlign: TextAlign.center,style: TextStyle(color: Colors.grey,fontSize: 25),)],),),
+                    Text(ss.documents[i].data['major'],textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontSize: 25),),],),),
               ],
             ),
           ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'homescreen.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 
 class loginData{
   String email='';
@@ -31,7 +31,17 @@ class _LoginPage extends State<LoginPage> {
         assert(user!=null);
         assert(await user.getIdToken()!=null);
         assert(FirebaseAuth.instance.currentUser() != null);
-        Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
+        if(user.isEmailVerified){
+          print("yes");
+          Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
+
+        } else {
+          print('no');
+          Fluttertoast.showToast(msg: "You must verify your email, if you don't have one, you should receive one soon.");
+          await FirebaseAuth.instance.signOut();
+          print(user.toString());
+        }
+        //Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
 
       } catch(e){
         print(e.message);
