@@ -23,9 +23,9 @@ class SeniorProject extends StatelessWidget{
       theme: new ThemeData(
       ),
       routes: <String,WidgetBuilder>{
-        '/homepage':(context)=> new HomeScreen(),
-        '/':(context)=> new HomeScreen(),
+        '/':(context)=> new LoginPage(),
         '/login':(context)=> new LoginPage(),
+        '/homepage':(context)=> new HomeScreen(),
         '/chat':(context)=> new Chat(),
         '/Profile':(context)=> new Profile(),
         '/EditProfile':(context)=> new EditProfile(),

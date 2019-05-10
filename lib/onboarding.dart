@@ -162,7 +162,15 @@ class _Onboarding extends State<Onboarding> {
                 },
               ),
             ),
-            RaisedButton(child: Text('Submit'),onPressed: incrementPage,color: Colors.white,),
+            RaisedButton(child: Text('Submit'),onPressed: (){
+              if(data.name!=""&& data.name!="default") {
+                //print("name is "+data.name);
+                incrementPage();
+              } else {
+                Fluttertoast.showToast(msg: "Enter a name");
+              }
+
+            },color: Colors.white,),
           ],
         ),),
       ],
@@ -232,7 +240,7 @@ class _Onboarding extends State<Onboarding> {
       }
       setState(() {
         classes.add(classToAdd);
-
+        data.classes=classes;
         getclass.clear();
       });
     } else {
@@ -280,7 +288,17 @@ class _Onboarding extends State<Onboarding> {
 
               Expanded(child:showWidgets()),
 
-              RaisedButton(child: Text('Submit'),onPressed: incrementPage),
+              RaisedButton(child: Text('Submit'),onPressed: (){
+                if(data.classes.isNotEmpty) {
+                  print(data.classes);
+                  alterUserData();
+                 // incrementPage();
+                } else {
+                  print("empty");
+                  print(data.classes);
+                }
+              }
+              ),
             ],
           ),),
       ],
@@ -303,26 +321,6 @@ class _Onboarding extends State<Onboarding> {
     }
     return Row(children: list, mainAxisAlignment: MainAxisAlignment.spaceEvenly,);
   }
-
-  /*
-    Widget showWidgets(){
-    List<Widget> list=List<Widget>();
-    for(int i=0;i<classes.length;i++){
-      list.add(Container(child:GestureDetector(onTap: null,child: Dismissible(key: Key(classes[i]), child: Text(classes[i]),
-      onDismissed: (_){
-        print('here');
-        classes.removeAt(i);
-        }
-      ),
-      ),
-      ));
-    }
-    return Column(
-        children: list,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    );
-  }
-   */
 
 
   @override
