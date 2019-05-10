@@ -286,7 +286,7 @@ class _Onboarding extends State<Onboarding> {
                 ],
               ),
 
-              Expanded(child:showWidgets()),
+              Expanded(child:Center(child:showWidgets(),),),
 
               RaisedButton(child: Text('Submit'),onPressed: (){
                 if(data.classes.isNotEmpty) {
@@ -308,7 +308,7 @@ class _Onboarding extends State<Onboarding> {
   Widget showWidgets(){
     List<Widget> list=List<Widget>();
     for(int i=0;i<classes.length;i++){
-      list.add(GestureDetector(onTap: () {
+      list.add(Container(padding: EdgeInsets.all(10),child:GestureDetector(onTap: () {
 
         setState(() {
           classes.removeAt(i);
@@ -317,9 +317,9 @@ class _Onboarding extends State<Onboarding> {
       }
       ,child:(Container(color:Colors.white,child:Text(classes[i],style: TextStyle(fontSize: 20,color: Colors.teal),))))
 
-      );
+      ,));
     }
-    return Row(children: list, mainAxisAlignment: MainAxisAlignment.spaceEvenly,);
+    return Wrap(children: list,);
   }
 
 
