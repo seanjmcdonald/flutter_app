@@ -111,12 +111,17 @@ class _CameraApp extends State<CameraApp> {
     if(user!=null && user.isEmailVerified){
       Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
     } else{
+      print(user);
       Fluttertoast.showToast(msg: "Are you sure you verified your email?");
+      setState(() {
+        user.reload();
+      });
     }
   }
 
   @override
   Widget build(context){
+    getUid();
     return Scaffold(
       backgroundColor: Colors.teal,
      // appBar: AppBar(title: Text('camera')),
@@ -146,7 +151,10 @@ class _CameraApp extends State<CameraApp> {
               ):Text(''),),
               Center(child:Container(child: Text("You should have received an authentication email, hit the buttom below after you confirm",style: TextStyle(color: Colors.white,fontSize: 25),textAlign: TextAlign.center,),
                 padding: EdgeInsets.all(20),),),
-             RaisedButton(onPressed: getAuth,child: Text('Log In',),color: Colors.white,),
+             RaisedButton(onPressed:(){
+               user.getIdToken(refresh: true);
+               getAuth();
+             },child: Text('Log In',),color: Colors.white,),
 
              /* SizedBox(height: 40.0,width: 110.0,
                 child: RaisedButton(child:

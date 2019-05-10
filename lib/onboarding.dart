@@ -216,7 +216,10 @@ class _Onboarding extends State<Onboarding> {
                   ),
 
 
-              (selectedYear!=''&&major!=null)?RaisedButton(child: Text('Submit',style: TextStyle(color: Colors.teal,)),onPressed: incrementPage):Container(),
+              (selectedYear!=''&&major!=null)?RaisedButton(child: Text('Submit',style: TextStyle(color: Colors.teal,)),onPressed: () {
+                alterUserData();
+                incrementPage();
+              }):Container(),
             ],
           ),),
       ],
@@ -292,10 +295,9 @@ class _Onboarding extends State<Onboarding> {
                 if(data.classes.isNotEmpty) {
                   print(data.classes);
                   alterUserData();
-                 // incrementPage();
+                  incrementPage();
                 } else {
-                  print("empty");
-                  print(data.classes);
+                  Fluttertoast.showToast(msg: "Add a Class before going to the next page");
                 }
               }
               ),
