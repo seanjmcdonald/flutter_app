@@ -216,33 +216,7 @@ class _Onboarding extends State<Onboarding> {
   }
 
   Widget getPicture(){
-    return  Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Expanded(
-          child:
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-
-              Container(
-                width: MediaQuery.of(context).size.width/2,
-                child: TextField(
-                  controller: getname,
-                  onChanged: (_){
-                    setState(() {
-                      name=getname.text;
-                      getUser();
-                    });
-                  },
-                ),
-              ),
-              RaisedButton(child: Text('Submit'),onPressed: null),
-            ],
-          ),),
-      ],
-    );
+    return  CameraApp();
   }
   
   addClass(){

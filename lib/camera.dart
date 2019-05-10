@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'userobject.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'homescreen.dart';
 /*
 
 https://www.youtube.com/watch?v=kNe4Fw3zkKY
@@ -39,11 +41,13 @@ class _CameraApp extends State<CameraApp> {
   }
 
   uploadImage() async {
+    Fluttertoast.showToast(msg: "Don't move to the next page until you get a confirmation");
     if(user!=null) {
       final StorageReference ref = FirebaseStorage.instance.ref().child(user.uid);
       final StorageUploadTask task = ref.putFile(image);
 
       String downurl = (await (await task.onComplete).ref.getDownloadURL()).toString();
+      Fluttertoast.showToast(msg: 'Image uploaded, change your image or go to the next page.');
       if(downurl!=null) {
         setState(() {
           location = downurl.toString();
@@ -103,16 +107,27 @@ class _CameraApp extends State<CameraApp> {
     }
   }
 
+  getAuth(){
+    if(user!=null && user.isEmailVerified){
+      Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
+    } else{
+      Fluttertoast.showToast(msg: "Are you sure you verified your email?");
+    }
+  }
+
   @override
   Widget build(context){
     return Scaffold(
+      backgroundColor: Colors.teal,
      // appBar: AppBar(title: Text('camera')),
       body: ListView(
         children: <Widget>[
           SizedBox(
             width: 200.0,
             height: 270.0,
-            child: image==null?Container():Image.file(image),
+            child: image==null?Center(child:Container(child: Text("You don't need to upload a picture, you are welcome to do so!",style: TextStyle(color: Colors.white,fontSize: 25),textAlign: TextAlign.center,),
+            padding: EdgeInsets.all(20),),)
+                :Image.file(image),
           ),
           Column(
             //mainAxisAlignment: MainAxisAlignment.,
@@ -120,8 +135,8 @@ class _CameraApp extends State<CameraApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  SizedBox(height: 40.0,width: 110.0,child: RaisedButton(child: Text('from gallery'),onPressed: getFromGallery,color: Colors.red,),),
-                  SizedBox(height: 40.0,width:110.0,child:RaisedButton(child: Text('with camera'),onPressed: getFromCamera,color: Colors.blue,),),
+                  SizedBox(height: 40.0,width: 110.0,child: RaisedButton(child: Text('from gallery'),onPressed: getFromGallery,color: Colors.white,),),
+                  SizedBox(height: 40.0,width:110.0,child:RaisedButton(child: Text('with camera'),onPressed: getFromCamera,color: Colors.white,),),
                 ],
               ),
               SizedBox(child: image!=null?RaisedButton(child: Text('upload photo'),onPressed: () {
@@ -129,6 +144,9 @@ class _CameraApp extends State<CameraApp> {
                 location==null?Text('waiting'):Container(child:Text('the future is '+location.toString()));
               }
               ):Text(''),),
+              Center(child:Container(child: Text("You should have received an authentication email, hit the buttom below after you confirm",style: TextStyle(color: Colors.white,fontSize: 25),textAlign: TextAlign.center,),
+                padding: EdgeInsets.all(20),),),
+             RaisedButton(onPressed: getAuth,child: Text('Log In',),color: Colors.white,),
 
              /* SizedBox(height: 40.0,width: 110.0,
                 child: RaisedButton(child:
