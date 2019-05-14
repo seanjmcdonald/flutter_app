@@ -38,7 +38,6 @@ class _DisplayUserPage extends State<DisplayUserPage> with SingleTickerProviderS
   //FIX change ot init state
   List<bool> toggleCalender= new List(7*12);
   MessageUsers users=MessageUsers();
-  List<bool> avail=List();
 
 
 
@@ -58,10 +57,11 @@ class _DisplayUserPage extends State<DisplayUserPage> with SingleTickerProviderS
 
   Widget availability(){
     List<Widget> list=List<Widget>();
-    for(int i=0;i<'${widget.userDocument['availability']}'.length;i++){
-      list.add(Text('${widget.userDocument['availability'][i]}'.toString()));
+    for(int i=0;i<4;i++){
+      print("length is "+'${widget.userDocument['availability'][i]}'.toString());
+   //   list.add(Text('${widget.userDocument['availability'][0][i]}'.toString()));
     }
-    return Wrap(children: list,);
+    //return Wrap(children: list,);
   }
 
 /*
