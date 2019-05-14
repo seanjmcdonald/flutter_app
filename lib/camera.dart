@@ -108,14 +108,14 @@ class _CameraApp extends State<CameraApp> {
   }
 
   getAuth(){
+    setState(() {
+      user.reload();
+    });
     if(user!=null && user.isEmailVerified){
-      Navigator.pushReplacement(context,new MaterialPageRoute(builder: (context)=> new HomeScreen()));
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> HomeScreen()));
     } else{
       print(user);
-      Fluttertoast.showToast(msg: "Are you sure you verified your email?");
-      setState(() {
-        user.reload();
-      });
+      Fluttertoast.showToast(msg: "Are you sure you verified your email? If you have, try a couple more times");
     }
   }
 
@@ -156,26 +156,10 @@ class _CameraApp extends State<CameraApp> {
                getAuth();
              },child: Text('Log In',),color: Colors.white,),
 
-             /* SizedBox(height: 40.0,width: 110.0,
-                child: RaisedButton(child:
-                Text('back to profile'),
-                  onPressed:() {
-                    Navigator.of(context).pushNamed('/Profile');
-    },
-
-                   // Navigator.pushNamed(context,'/Profile'),
-                  color: Colors.red,
-              ),),
-              */
-              //image!=null?RaisedButton(onPressed: null):
           ],
           ),
         ],
       ),
-  //    floatingActionButton: FloatingActionButton(
-    //    onPressed: null,
-      //  child: Icon(Icons.camera_alt),
-      //),
     );
   }
 }

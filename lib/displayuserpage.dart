@@ -38,6 +38,7 @@ class _DisplayUserPage extends State<DisplayUserPage> with SingleTickerProviderS
   //FIX change ot init state
   List<bool> toggleCalender= new List(7*12);
   MessageUsers users=MessageUsers();
+  List<bool> avail=List();
 
 
 
@@ -51,7 +52,19 @@ class _DisplayUserPage extends State<DisplayUserPage> with SingleTickerProviderS
     //getUserExchange();
   }
 
+  Widget showCalender(){
+    return availability();
+  }
 
+  Widget availability(){
+    List<Widget> list=List<Widget>();
+    for(int i=0;i<'${widget.userDocument['availability']}'.length;i++){
+      list.add(Text('${widget.userDocument['availability'][i]}'.toString()));
+    }
+    return Wrap(children: list,);
+  }
+
+/*
   Widget showCalender(){
     return Expanded(
       child: Column(
@@ -70,9 +83,23 @@ class _DisplayUserPage extends State<DisplayUserPage> with SingleTickerProviderS
         ],
       )
     );
-}
+}*/
 
-Widget test(String hour,int i){
+  Widget test(String hour,int i){
+    return Wrap(
+      children: <Widget>[
+        SizedBox(
+          width: MediaQuery.of(context).size.width/8,
+          child: Text(hour),
+        ),        SizedBox(
+          width: MediaQuery.of(context).size.width/8,
+          child: Text(hour),
+        ),
+      ],
+    );
+  }
+
+Widget tests(String hour,int i){
   return Row(
     children: <Widget>[
       SizedBox(
